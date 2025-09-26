@@ -1,0 +1,21 @@
+<!-- F:/.../notification.component.html -->
+<div class="notification-container">
+  <!-- Lặp qua danh sách notifications từ service -->
+  <div *ngFor="let notification of notifications$ | async"
+       class="toast"
+       [ngClass]="notification.type"
+       [@toast]>
+
+    <!-- 1. Icon -->
+    <i [class]="getIcon(notification.type)" class="toast-icon"></i>
+
+    <!-- 2. Nội dung -->
+    <p class="toast-message">{{ notification.message }}</p>
+
+    <!-- 3. Nút đóng -->
+    <button class="toast-close" (click)="close(notification)">&times;</button>
+
+    <!-- 4. Thanh thời gian chạy -->
+    <div class="toast-progress" [style.animation-duration]="notification.duration + 'ms'"></div>
+  </div>
+</div>

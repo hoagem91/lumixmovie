@@ -1,0 +1,54 @@
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Main Footer Content -->
+    <div class="footer-content">
+      <!-- Footer Links Sections -->
+      <div class="footer-sections">
+        <div class="footer-section" *ngFor="let section of footerSections">
+          <h3 class="footer-title">{{ section.title }}</h3>
+          <ul class="footer-links">
+            <li *ngFor="let link of section.links">
+              <a [routerLink]="link.url" class="footer-link">{{ link.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Connect With Us Section -->
+      <div class="footer-social">
+        <h3 class="footer-title">Connect With Us</h3>
+        <div class="social-links">
+          <a
+            *ngFor="let social of socialLinks"
+            [href]="social.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+            [attr.aria-label]="social.name"
+            (click)="onSocialClick(social.url)"
+          >
+            <i [class]="social.icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          © {{ currentYear }} StreamVib. All Rights Reserved
+        </p>
+        <div class="legal-links">
+          <a
+            *ngFor="let legal of legalLinks; let last = last"
+            [routerLink]="legal.url"
+            class="legal-link"
+          >
+            {{ legal.name }}<span *ngIf="!last" class="separator">|</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

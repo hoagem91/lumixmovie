@@ -1,0 +1,284 @@
+// --- Biến màu chủ đạo ---
+$netflix-red: #E50914;
+$netflix-dark-bg: #111827; // Màu nền chính
+$netflix-dark-card: #1f2937; // Màu nền cho card, table
+$text-primary: #f9fafb; // Màu chữ chính
+$text-secondary: #9ca3af; // Màu chữ phụ
+$border-color: #374151; // Màu viền
+
+.user-management {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: $netflix-dark-bg;
+  color: $text-primary;
+  line-height: 1.5;
+  min-height: 100vh;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 16px;
+    }
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+
+    .users-count {
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+
+      span {
+        color: $text-secondary;
+        font-weight: 400;
+      }
+    }
+
+    .controls-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+  }
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    border: none;
+
+    &.btn-secondary {
+      background-color: transparent;
+      color: $text-secondary;
+      border: 1px solid $border-color;
+
+      &:hover {
+        background-color: $netflix-dark-card;
+        border-color: $text-secondary;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $netflix-red;
+      color: white;
+
+      &:hover {
+        background-color: darken($netflix-red, 10%);
+      }
+    }
+  }
+
+  .table-container {
+    border-radius: 8px;
+    background-color: $netflix-dark-card;
+    overflow: hidden;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        background-color: transparent;
+
+        th {
+          padding: 16px;
+          text-align: left;
+          font-weight: 600;
+          color: $text-secondary;
+          font-size: 14px;
+          border-bottom: 1px solid $border-color;
+
+          &.th-sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+
+            &:hover {
+              background-color: lighten($netflix-dark-card, 5%);
+            }
+
+            i {
+              margin-left: 8px;
+              color: $text-secondary;
+            }
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:hover {
+            background-color: lighten($netflix-dark-card, 3%);
+          }
+
+          td {
+            padding: 16px;
+            border-bottom: 1px solid $border-color;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .user-details {
+      h4 {
+        font-weight: 600;
+        color: $text-primary;
+        margin-bottom: 2px;
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .access-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .tag {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+
+      &.tag-admin {
+        background-color: rgba($netflix-red, 0.15);
+        color: $netflix-red;
+      }
+
+      &.tag-default {
+        background-color: $border-color;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .date-text {
+    color: $text-secondary;
+    font-size: 13px;
+  }
+
+  .actions {
+    position: relative;
+
+    .actions-btn {
+      background: none;
+      border: none;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      color: $text-secondary;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: $border-color;
+        color: $text-primary;
+      }
+    }
+
+    .dropdown {
+      position: absolute;
+      right: 15px;
+      top: 21px;
+      background-color: lighten($netflix-dark-card, 5%);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      width: 80px;
+      border: 1px solid $border-color;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+
+    .page-btn {
+      padding: 8px 12px;
+      border: 1px solid $border-color;
+      background-color: $netflix-dark-card;
+      color: $text-secondary;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: $text-secondary;
+      }
+
+      &.active {
+        background-color: $netflix-red;
+        color: white;
+        border-color: $netflix-red;
+      }
+    }
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    .controls {
+      flex-direction: column;
+      align-items: stretch;
+
+      .controls-right {
+        justify-content: space-between;
+      }
+    }
+
+    .search-box input {
+      width: 100%;
+    }
+
+    .table-container {
+      overflow-x: auto;
+
+      table {
+        min-width: 800px;
+      }
+    }
+  }
+}

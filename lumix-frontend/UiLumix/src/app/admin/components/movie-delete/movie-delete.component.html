@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Xóa Phim</h1>
+    <p class="page-subtitle">Tìm kiếm và xóa phim khỏi hệ thống.</p>
+  </div>
+
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text"
+           placeholder="Nhập tên phim để tìm kiếm..."
+           class="search-input"
+           [formControl]="searchQuery"/>
+  </div>
+
+  <div class="results-container">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner-container" *ngIf="isSearching">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Search Results -->
+    <ul class="search-results" *ngIf="!isSearching && searchResults.length > 0">
+      <li *ngFor="let movie of searchResults" class="movie-item">
+        <img [src]="movie.posterUrl" [alt]="movie.title" class="movie-poster">
+        <div class="movie-info">
+          <h3 class="movie-title">{{ movie.title }}</h3>
+          <p class="movie-year">{{ movie.year }}</p>
+        </div>
+        <button class="delete-button" (click)="askForDeleteConfirmation(movie.id, movie.title)">
+          <i class="fas fa-trash-alt"></i>
+          <span>Xóa</span>
+        </button>
+      </li>
+    </ul>
+
+    <!-- No Results Message -->
+    <div class="no-results"
+         *ngIf="!isSearching && searchQuery.value && searchResults.length === 0">
+      <i class="fas fa-video-slash"></i>
+      <p>Không tìm thấy phim nào khớp với '{{ searchQuery.value }}'.</p>
+    </div>
+
+    <!-- Initial Prompt Message -->
+    <div class="no-results initial-prompt" *ngIf="!searchQuery.value">
+      <p>Sử dụng thanh tìm kiếm ở trên để tìm phim bạn muốn xóa.</p>
+    </div>
+  </div>
+  <app-prompt-message
+  [isVisible]="isPromptVisible"
+  [title]="promptTitle"
+  [message]="promptMessage"
+  confirmButtonText="Xoá"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="isPromptVisible = false"
+  >
+  </app-prompt-message>
+
+</div>

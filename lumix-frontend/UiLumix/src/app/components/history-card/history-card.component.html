@@ -1,0 +1,30 @@
+<div class="history-card" (click)="navigateToDetail()" *ngIf="historyItem && historyItem.movie">
+  <!-- Poster phim -->
+  <div class="card-poster">
+    <img [src]="historyItem.movie.posterUrl" [alt]="historyItem.movie.title">
+  </div>
+
+  <!-- Lớp phủ chứa thông tin -->
+  <div class="card-overlay">
+    <h4 class="movie-title">{{ historyItem.movie.title }}</h4>
+    <p class="watched-time">
+      Đã xem: {{ formatTime(historyItem.progressInSeconds) }}
+    </p>
+  </div>
+
+  <!-- Thanh tiến độ -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+  </div>
+
+  <!-- Nút xóa -->
+  <button
+    class="delete-btn"
+    (click)="onDeleteClick($event)"
+    [disabled]="isDeleting"
+    title="Xóa khỏi lịch sử"
+  >
+    <i *ngIf="isDeleting" class="fas fa-spinner fa-spin"></i>
+    <i *ngIf="!isDeleting" class="fas fa-times"></i>
+  </button>
+</div>

@@ -1,0 +1,107 @@
+<header class="header" [class.search-mode]="isSearchActive">
+  <div class="container">
+    <a routerLink="/home" class="logo">
+      <i class="fas fa-film"></i>
+      <span>LUMIX</span>
+    </a>
+    <nav class="desktop-nav">
+      <a routerLink="/home" routerLinkActive="active-link" class="nav-link">Trang Chủ</a>
+      <a routerLink="/movies" routerLinkActive="active-link" class="nav-link">Phim & Shows</a>
+      <a routerLink="/introduce" routerLinkActive="active-link" class="nav-link">Giới Thiệu</a>
+      <a routerLink="/support" routerLinkActive="active-link" class="nav-link">Hỗ Trợ</a>
+    </nav>
+    <div class="header-actions">
+      <!--Search Component-->
+      <div class="search-container" #searchContainer>
+        <button class="search-toggle" (click)="toggleSearch()">
+          <i class="fas" [ngClass]="isSearchActive? 'fa-times' : 'fa-search'"></i>
+        </button>
+        <input type="text" class="search-input"
+               [class.active]="isSearchActive"
+               placeholder="Tìm kiếm phim, thể loại..."
+               (input)="onSearchInput($event)"
+               [formControl]="searchQuery"
+        >
+        <div class="search-results-overlay" *ngIf="isSearchActive&&searchQuery.value">
+          <div *ngIf="isSearching" class="loading-spinner"></div>
+          <ul *ngIf="!isSearching&&searchResults.length>0" class="results-list">
+            <li *ngFor="let movie of searchResults" (click)="navigateToMovie(movie.id)">
+              <img [src]="movie.posterUrl" [alt]="movie.title">
+              <span>{{ movie.title }}</span>
+            </li>
+          </ul>
+          <div *ngIf="!isSearching&&searchResults.length === 0 && searchQuery.value" class="no-results">Không tìm
+            thấy kết quả.
+          </div>
+        </div>
+      </div>
+      <!-- Actions trên Desktop -->
+      <div class="desktop-actions">
+        <!-- HIỂN THỊ KHI CHƯA ĐĂNG NHẬP -->
+        <a routerLink="/login" *ngIf="!isLoggedIn" class="auth-button login">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Đăng nhập</span>
+        </a>
+
+        <!-- HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
+        <div *ngIf="isLoggedIn" class="user-menu" #userMenuContainer>
+          <a routerLink="/favorites" class="favorite-user">
+            <i class="fa-regular fa-heart"></i>
+          </a>
+          <button class="profile-user-btn" (click)="toggleProfileMenu($event)">
+            <i class="fa-solid fa-circle-user"></i>
+          </button>
+          <div class="profile-dropdown" *ngIf="isProfileMenuOpen">
+            <a routerLink="/profile" class="dropdown-item" (click)="isProfileMenuOpen=false">
+              <i class="fas fa-user-cog"></i>
+              <span>Tài khoản</span>
+            </a>
+            <a routerLink="/favorites" class="dropdown-item" (click)="isProfileMenuOpen=false">
+              <i class="fa-regular fa-heart"></i>
+              <span>Yêu thích</span>
+            </a>
+            <a routerLink="/history" class="dropdown-item" (click)="isProfileMenuOpen=false">
+              <i class="fas fa-history"></i>
+              <span>Lịch sử</span>
+            </a>
+            <button class="dropdown-item" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút bật/tắt menu trên mobile -->
+      <button class="menu-toggle" (click)="toggleMenu()">
+        <i class="fas" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menu trên Mobile -->
+<div class="mobile-menu-overlay" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+<nav class="mobile-menu" [class.open]="isMenuOpen">
+  <div class="mobile-user-header">
+    <div *ngIf="isLoggedIn" class="user-info">
+      <i class="fas fa-user-circle user-avatar"></i>
+      <span class="username">Xin chào!</span>
+    </div>
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="login-prompt" (click)="closeMenu()">Đăng nhập / Đăng ký</a>
+  </div>
+  <a routerLink="/home" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
+    class="fas fa-home"></i> Trang Chủ</a>
+  <a routerLink="/movies" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
+    class="fas fa-film"></i> Phim & Shows</a>
+  <a routerLink="/tv-shows" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
+    class="fas fa-tv"></i> Hỗ trợ</a>
+  <a routerLink="/favorites" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
+    class="fas fa-list"></i> Danh Sách Của Tôi</a>
+  <div class="mobile-menu-footer">
+    <button *ngIf="isLoggedIn" (click)="logoutAndCloseMenu()" class="auth-button logout">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Đăng xuất</span>
+    </button>
+  </div>
+</nav>

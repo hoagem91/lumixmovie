@@ -1,0 +1,132 @@
+<div class="login-wrapper">
+  <div class="login-container">
+    <!-- Header -->
+    <div class="login-header">
+      <h2>Tạo Tài Khoản Mới</h2>
+      <p class="subtitle">Bắt đầu hành trình khám phá thế giới phim ảnh</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form class="login-form" (ngSubmit)="onRegister()" #registerForm="ngForm">
+      <!-- Username -->
+      <div class="form-group">
+        <label class="form-label" for="username">Tên đăng nhập</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input
+            class="form-input"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Nhập tên đăng nhập của bạn"
+            [(ngModel)]="username"
+            required
+            #usernameInput="ngModel"
+          />
+        </div>
+        <!-- Validation Errors -->
+        <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="usernameInput.errors?.['required']">Tên đăng nhập là bắt buộc.</span>
+          <span *ngIf="usernameInput.errors?.['minlength']">Tên đăng nhập phải có ít nhất 3 ký tự.</span>
+        </div>
+      </div>
+      <!--  Email  -->
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope input-icon"></i>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Nhập địa chỉ email của bạn"
+            [(ngModel)]="email"
+            required
+            email
+            #emailInput="ngModel"
+          />
+        </div>
+        <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="emailInput.errors?.['required']">Email là bắt buộc.</span>
+          <span *ngIf="emailInput.errors?.['email']">Vui lòng nhập một địa chỉ email hợp lệ.</span>
+        </div>
+      </div>
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label" for="password">Mật khẩu</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input
+            class="form-input"
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            placeholder="Tạo mật khẩu (ít nhất 6 ký tự)"
+            [(ngModel)]="password"
+            required
+            minlength="6"
+            #passwordInput="ngModel"
+          />
+          <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+            <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+        <!-- Validation Errors -->
+        <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="passwordInput.errors?.['required']">Mật khẩu là bắt buộc.</span>
+          <span *ngIf="passwordInput.errors?.['minlength']">Mật khẩu phải có ít nhất 6 ký tự.</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Xác nhận mật khẩu</label>
+        <div class="input-wrapper">
+          <i class="fas fa-check-circle input-icon"></i>
+          <input
+            class="form-input"
+            [type]="showPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Nhập lại mật khẩu của bạn"
+            [(ngModel)]="confirmPassword"
+            required
+            #confirmPasswordInput="ngModel"
+          />
+        </div>
+        <!-- Validation Errors -->
+        <div *ngIf="confirmPasswordInput.invalid && (confirmPasswordInput.dirty || confirmPasswordInput.touched)"
+             class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="confirmPasswordInput.errors?.['required']">Vui lòng xác nhận lại mật khẩu.</span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-group">
+        <button type="submit" class="login-button" [disabled]="isLoading || registerForm.invalid">
+          <div *ngIf="!isLoading; else loadingBlock">Đăng Ký</div>
+          <ng-template #loadingBlock>
+            <div class="loading-content">
+              <i class="fas fa-spinner"></i>
+              <span>Đang xử lý...</span>
+            </div>
+          </ng-template>
+        </button>
+      </div>
+
+      <!-- Messages -->
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+      <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    </form>
+
+    <!-- Link to Login -->
+    <div class="register-link">
+      <p>Đã có tài khoản? <a routerLink="/login">Đăng nhập ngay</a></p>
+    </div>
+  </div>
+</div>

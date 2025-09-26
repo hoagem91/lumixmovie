@@ -1,0 +1,126 @@
+:host {
+  display: block;
+}
+
+.history-card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #181818;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+  }
+}
+
+.card-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+  z-index: 2;
+}
+
+.movie-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.25rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.watched-time {
+  font-size: 0.75rem;
+  color: #b3b3b3;
+  margin: 0;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background-color: rgba(100, 100, 100, 0.5);
+  z-index: 3;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #e50914;
+  transition: width 0.5s ease;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(20, 20, 20, 0.7);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+
+  .history-card:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background-color: #e50914;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-overlay {
+    padding: 0.75rem;
+  }
+
+  .movie-title {
+    font-size: 0.85rem;
+  }
+
+  .watched-time {
+    font-size: 0.7rem;
+  }
+
+  .delete-btn {
+    opacity: 1;
+    background-color: rgba(20, 20, 20, 0.6);
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+}

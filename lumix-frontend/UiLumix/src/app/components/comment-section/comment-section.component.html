@@ -1,0 +1,95 @@
+<div class="comments-container">
+  <h3>Bình Luận ({{ comments.length }})</h3>
+
+  <div class="comment-form-wrapper" *ngIf="authService.isLoggedIn();else showLoginForm">
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <textarea
+        formControlName="content"
+        placeholder="Viết bình luận..."
+        rows="4">
+      </textarea>
+      <div class="form-actions">
+        <span *ngIf="commentForm.get('content')?.hasError('minLength')" class="error-text">
+           Bình luận phải có ít nhất 3 ký tự.
+        </span>
+        <button type="submit" [disabled]="commentForm.invalid|| isSubmitting">
+          <span *ngIf="!isSubmitting">Bình luận</span>
+          <span *ngIf="isSubmitting" class="spinner-small"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+  <ng-template #showLoginForm>
+    <div class="login-prompt">
+      Vui lòng <a routerLink="/login">đăng nhập</a> để bình luận.
+    </div>
+  </ng-template>
+
+  <!-- Danh sach cac binh luan -->
+  <div class="comments-list">
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <span>Đang tải bình luận ...</span>
+    </div>
+
+    <div *ngIf="!loading&&error" class="error-state">
+      <p>{{ error }}</p>
+      <button (click)="loadComments()">Thử lại</button>
+    </div>
+
+    <div *ngIf="!loading && comments.length === 0 && !error" class="empty-state">
+      <p>Không có bình luận nào.Hãy là người đầu tiên</p>
+    </div>
+
+    <div *ngFor="let comment of comments" class="comment-item">
+      <div class="comment-author">
+        <i class="fas fa-user-circle author-avatar"></i>
+        <div class="author-info">
+          <span class="author-name">{{ comment.username }}</span>
+          <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+        </div>
+      </div>
+      <div class="comment-content">
+        <ng-container *ngIf="editingCommentId != comment.id">
+          {{ comment.content }}
+        </ng-container>
+        <ng-container *ngIf="editingCommentId === comment.id">
+          <textarea class="edit-textarea" [(ngModel)]="editingContent" rows="3"></textarea>
+          <div class="edit-actions">
+            <button class="cancel-btn" (click)="cancelEdit()">Huỷ</button>
+            <button class="save-btn" (click)="saveUpdate()" [disabled]="isUpdating">
+              <i *ngIf="isUpdating" class="fas fa-spinner fa-spin"></i>
+              {{ isUpdating ? 'Đang lưu...' : 'Lưu' }}
+            </button>
+          </div>
+        </ng-container>
+      </div>
+      <button
+        class="dot-btn"
+        (click)="toggleCommentMenu(comment.id,$event)"
+      >
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+      <div
+        class="comment-menu-dropdown"
+        *ngIf="openMenuCommentId === comment.id"
+        (click)="$event.stopPropagation()">
+        <button class="action-btn" (click)="startEdit(comment)">
+          <i class="fas fa-pencil-alt"></i>
+          <span>Sửa</span>
+        </button>
+        <button class="action-btn delete-btn" (click)="askForDeleteConfirm(comment.id)">
+          <i class="fas fa-trash"></i>
+          <span>Xóa</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-prompt-message
+  [isVisible]="isVisiable"
+  [title]="promptTitle"
+  [message]="promptMessage"
+  confirmButtonText="Xóa"
+  (onConfirm)="deleteComment()"
+></app-prompt-message>

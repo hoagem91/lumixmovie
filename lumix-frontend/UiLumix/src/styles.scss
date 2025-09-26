@@ -1,0 +1,22 @@
+/* src/styles.scss */
+
+/* Reset các style mặc định của trình duyệt */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Đảm bảo body chiếm toàn bộ chiều cao */
+  box-sizing: border-box;
+}
+
+/* Bạn cũng có thể đặt các style toàn cục khác ở đây */
+body {
+  /* Đặt màu nền và font chữ chung cho toàn bộ ứng dụng */
+  background-color: #0f0f0f;
+  font-family: 'Arial', sans-serif;
+  color: #ffffff;
+}
+
+/* Đảm bảo tất cả các phần tử kế thừa box-sizing */
+*, *::before, *::after {
+  box-sizing: inherit;
+}

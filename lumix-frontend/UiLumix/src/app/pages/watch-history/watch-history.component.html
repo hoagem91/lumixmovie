@@ -1,0 +1,42 @@
+<app-header></app-header>
+
+<div class="history-page-container">
+  <div class="page-header">
+    <h1>Lịch sử xem</h1>
+    <p>Tất cả những bộ phim bạn đã xem hoặc đang xem dở.</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="state-container">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && error" class="state-container error-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadHistory()" class="retry-button">Thử lại</button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && !error">
+    <!-- Empty State -->
+    <div *ngIf="historyItems.length === 0" class="state-container empty-state">
+      <i class="fas fa-film"></i>
+      <h2>Lịch sử của bạn còn trống</h2>
+      <p>Hãy bắt đầu xem một bộ phim để ghi lại hành trình của bạn!</p>
+      <a routerLink="/movies" class="browse-button">Khám phá Phim</a>
+    </div>
+
+    <!-- History Grid -->
+    <div *ngIf="!isLoading && !error && historyItems.length > 0" class="history-grid">
+      <app-history-card
+        *ngFor="let item of historyItems"
+        [historyItem]="item"
+        (deleted)="handleItemDeleted($event)"
+      ></app-history-card>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

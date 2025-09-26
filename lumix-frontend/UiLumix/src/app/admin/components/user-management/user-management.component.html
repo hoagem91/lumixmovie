@@ -1,0 +1,144 @@
+<!-- user-management.component.html -->
+<div class="user-management">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Quản lý người dùng</h1>
+      <p>Quản lý tài khoản người dùng trong hệ thống.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="users-count">
+        All users <span>{{ allUsers.length }}</span>
+      </div>
+      <div class="controls-right">
+        <!--        <div class="search-box">-->
+        <!--          <i class="fas fa-search"></i>-->
+        <!--          <input-->
+        <!--            type="text"-->
+        <!--            placeholder="Search"-->
+        <!--            [formControl]="searchControl"-->
+        <!--          >-->
+        <!--        </div>-->
+        <!--        <button class="btn btn-secondary" (click)="onFilters()">-->
+        <!--          <i class="fas fa-filter"></i>-->
+        <!--          Filters-->
+        <!--        </button>-->
+        <button class="btn btn-primary" (click)="onCreateModel()">
+          <i class="fas fa-plus"></i>
+          Add user
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th class="th-sortable">
+            User name
+          </th>
+          <th>Quyền truy cập</th>
+          <th class="th-sortable">
+            Ngày tham gia
+          </th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of paginatedUsers">
+          <td>
+            <div class="user-info">
+              <div class="user-details">
+                <h4>{{ user.username }}</h4>
+                <p>{{ user.email }}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="access-tags">
+                <span
+                  class="tag"
+                  *ngFor="let role of user.roles"
+                  [ngClass]="getAccessTagClass(role.name)"
+                >
+                  {{ role.name }}
+                </span>
+            </div>
+          </td>
+          <td>
+              <span class="date-text">
+                {{ user.createdAt }}
+              </span>
+          </td>
+          <td class="actions">
+            <button
+              class="actions-btn"
+              (click)="onUserActions(user.userId,$event)"
+            >
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <div
+              class="dropdown"
+              *ngIf="openMenuUserId === user.userId"
+              (click)="$event.stopPropagation()"
+            >
+              <button class="actions-btn" (click)="onEditModal(user)">
+                <i class="fas fa-edit" style="margin-right: 6px;font-size: 10px;"></i>
+                <span>Sửa</span>
+              </button>
+              <button class="actions-btn" (click)="askForDeleteConfirm(user.userId,user.username)">
+                <i class="fas fa-trash" style="margin-right: 6px;font-size: 10px;"></i>
+                <span>Xoá</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--  Pagination  -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="page-btn"
+        [class.active]="currentPage === page"
+        (click)="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+      <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    <!-- Modal -->
+    <app-prompt-message
+      [isVisible]="isVisible"
+      [title]="promptTitle"
+      [message]="promptMessage"
+      (onConfirm)="onDeleteUser()"
+      (onCancel)="isVisible = false"
+    >
+    </app-prompt-message>
+    <!--  Modal Edit User  -->
+    <app-user-update
+      *ngIf="isEditModalVisible"
+      [userToEdit]="selectedUserForEdit"
+      (userUpdate)="handleUserUpdated($event)"
+      (closeModal)="closeEditModal()"
+    >
+    </app-user-update>
+    <!--  Modal Create User  -->
+    <app-user-create
+      *ngIf="isCreateModalVisible"
+      (userCreated)="handleUserCreate($event)"
+      (closeModal)="closeCreateModel()"
+    >
+    </app-user-create>
+  </div>
+</div>

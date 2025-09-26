@@ -1,0 +1,99 @@
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-header">
+      <h2>Đăng nhập</h2>
+      <p class="subtitle">Chào mừng bạn trở lại</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()" class="login-form" [formGroup]="loginForm">
+      <div class="form-group">
+        <label for="username" class="form-label">Tài khoản</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input
+            class="form-input"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Nhập tên đăng nhập của bạn"
+            formControlName="username"
+          />
+        </div>
+        <!-- Validation Errors -->
+        <div *ngIf="this.loginForm.get('username')?.invalid && (this.loginForm.get('username')?.dirty || this.loginForm.get('username')?.touched)" class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="this.loginForm.get('username')?.errors?.['required']">Tên đăng nhập là bắt buộc.</span>
+          <span *ngIf="this.loginForm.get('username')?.errors?.['minlength']">Tên đăng nhập phải có ít nhất 3 ký tự.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Mật khẩu</label>
+        <div class="input-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            name="password"
+            class="form-input"
+            placeholder="Nhập mật khẩu"
+            formControlName="password"
+          />
+          <i class="input-icon fas fa-lock"></i>
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+          >
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <div *ngIf="this.loginForm.get('password')?.invalid && (this.loginForm.get('password')?.dirty || this.loginForm.get('password')?.touched)" class="field-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="this.loginForm.get('password')?.errors?.['required']">Vui lòng nhập mật khẩu</span>
+          <span *ngIf="this.loginForm.get('password')?.errors?.['minlength']">Mật khẩu phải có ít nhất 6 ký tự</span>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" />
+          <span class="checkmark"></span>
+          Ghi nhớ đăng nhập
+        </label>
+        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+      </div>
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isLoading || loginForm.invalid"
+        [class.loading]="isLoading"
+      >
+        <span *ngIf="!isLoading">Đăng nhập</span>
+        <span *ngIf="isLoading" class="loading-content">
+          <i class="fas fa-spinner fa-spin"></i>
+          Đang đăng nhập...
+        </span>
+      </button>
+
+      <div *ngIf="error" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+    </form>
+
+    <div class="divider">
+      <span>hoặc</span>
+    </div>
+    <div class="form-group">
+      <a href="http://localhost:8888/lumix/oauth2/authorization/google" class="google-login-button">
+        <i class="fab fa-google"></i>
+        <span>Đăng nhập bằng Google</span>
+      </a>
+    </div>
+    <div class="register-link">
+      <p>Chưa có tài khoản? <a routerLink="/register">Đăng ký ngay</a></p>
+    </div>
+  </div>
+</div>

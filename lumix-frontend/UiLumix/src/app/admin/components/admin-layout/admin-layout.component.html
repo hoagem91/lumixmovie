@@ -1,0 +1,67 @@
+<div class="admin-container">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2 class="logo">Lumix Admin</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="dashboard" routerLinkActive="active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="has-submenu" [class.open]="isMovieMenuOpen">
+          <a href="#" (click)="toggleMovieMenu($event)">
+            <i class="fas fa-film"></i>
+            <span>Quản lý Phim</span>
+            <i class="fas fa-chevron-down submenu-indicator"></i>
+          </a>
+          <ul class="submenu" *ngIf="isMovieMenuOpen">
+            <li>
+              <a routerLink="movies/create" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" style="padding-left: 39px">
+                <i class="fas fa-plus submenu-icon"></i>
+                <span>Thêm Phim mới</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="movies/update" routerLinkActive="active" style="padding-left: 39px">
+                <i class="fas fa-edit submenu-icon"></i>
+                <span>Cập nhât Phim</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="movies/delete" routerLinkActive="active" style="padding-left: 39px">
+                <i class="fas fa-trash submenu-icon"></i>
+                <span>Xóa Phim</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a routerLink="users" routerLinkActive="active">
+            <i class="fas fa-users"></i>
+            <span>Quản lý User</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="comments" routerLinkActive="active">
+            <i class="fas fa-comments"></i>
+            <span>Quản lý Comment</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Đăng xuất</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <!-- Nội dung của các trang con sẽ được hiển thị ở đây -->
+    <router-outlet></router-outlet>
+  </main>
+</div>

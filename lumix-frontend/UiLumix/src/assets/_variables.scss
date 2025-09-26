@@ -1,0 +1,23 @@
+
+// Bảng màu chính
+$primary-color: #e50914; // Màu đỏ chủ đạo của Lumix/Netflix
+$primary-dark: #b8070f;   // Màu đỏ đậm hơn khi hover
+
+// Màu nền
+$background-dark: #0f0f0f;         // Nền chính của toàn bộ ứng dụng
+$background-container: #1a1a1a;  // Nền cho các card, form
+$background-input: #333333;        // Nền cho các ô nhập liệu
+
+// Màu chữ
+$text-primary: #ffffff;     // Chữ trắng cho nội dung chính
+$text-secondary: #b3b3b3;   // Chữ xám nhạt cho các phụ đề, placeholder
+
+// Màu trạng thái
+$error-color: #ef4444;    // Màu đỏ cho thông báo lỗi
+$success-color: #10b981;  // Màu xanh cho thông báo thành công
+
+// Viền và bóng đổ
+$border-color: #404040;
+$border-focus: $primary-color;
+$shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+$shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.3);

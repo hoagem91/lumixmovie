@@ -1,0 +1,65 @@
+spring:
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/lumix}
+    username: ${DBMS_USERNAME:root}
+    password: ${DBMS_PASSWORD:09012004}
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: vuhoangltv@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+              - openid
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          google:
+            issuer-uri: https://accounts.google.com
+server:
+  port: 8888
+  servlet:
+    context-path: /lumix
+    encoding:
+      charset: UTF-8
+      force: true
+      enable: true
+jwt:
+  signerKey: "hfFGjIeIlOOo6n87MQp1uFWZwnPRJyGlncDZ2mu36fQuoPUxR3py48cwkiPlgN56"
+  valid-duration: 7200
+  refreshable-duration: 604800
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:cloud_name}
+  api-key: ${CLOUDINARY_API_KEY:api_key}
+  api-secret: ${CLOUDINARY_API_SECRET:api_secret}
+app:
+  frontend:
+    registration-result-url: "http://localhost:4200/registration-pending"
+  oauth2:
+    redirect-url:
+      success: "http://localhost:4200/login-success"
+      error: "http://localhost:4200/login-error"
+cookie:
+  secure: false

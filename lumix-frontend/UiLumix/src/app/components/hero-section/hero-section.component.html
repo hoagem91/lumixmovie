@@ -1,0 +1,78 @@
+<section class="hero-section" *ngIf="currentMovie">
+  <div class="hero-background">
+    <div *ngFor="let movie of slideshowMovies; let i = index"
+         class="slide-background-item"
+         [class.active]="i === currentMovieIndex">
+      <video #videoPlayer
+             [src]="movie.videoUrl"
+             [muted]="isMuted"
+             loop
+             autoplay
+             playsinline
+             class="hero-bg-image"></video>
+    </div>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-info">
+      <h1 class="hero-title">{{ currentMovie.title }}</h1>
+      <div class="hero-actions">
+        <button class="btn-play" (click)="onPlay(currentMovie)">
+          <i class="fas fa-play" style="margin-right: 5px"></i> Xem Ngay
+        </button>
+        <button
+          class="sound-icon"
+          [class.is-favorite]="isFavorite(currentMovie.id)"
+          (click)="toggleFavorite(currentMovie, $event)"
+          [disabled]="isProcessing(currentMovie.id)"
+          title="isFavorite(item.id) ? 'Xóa khỏi danh sách yêu thích' : 'Thêm vào danh sách yêu thích'"
+        >
+          <i *ngIf="isProcessing(currentMovie.id)" class="fas fa-spinner fa-spin"></i>
+          <ng-container *ngIf="!isProcessing(currentMovie.id) && !isFavorite(currentMovie.id)">
+            <i class="fa-regular fa-heart" style="font-size: 20px;color: white"></i>
+          </ng-container>
+          <ng-container *ngIf="!isProcessing(currentMovie.id) && isFavorite(currentMovie.id)">
+            <i class="fas fa-heart" style="color: red;font-size: 20px"></i>
+          </ng-container>
+        </button>
+        <button class="sound-icon" (click)="toggleSound()" [attr.aria-label]="isMuted ? 'Bật tiếng' : 'Tắt tiếng'">
+          <img *ngIf="isMuted" src="assets/sound-slash.svg" alt="Unmute">
+          <img *ngIf="!isMuted" src="assets/sound.svg" alt="Mute">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slideshow Navigation -->
+  <div class="hero-controls" *ngIf="slideshowMovies.length > 1">
+    <button class="nav-btn nav-prev" (click)="prevSlide()" aria-label="Slide trước">‹</button>
+    <button class="nav-btn nav-next" (click)="nextSlide()" aria-label="Slide kế tiếp">›</button>
+  </div>
+
+  <!-- Slide Indicators -->
+  <div class="slide-indicators" *ngIf="slideshowMovies.length > 1">
+    <button *ngFor="let movie of slideshowMovies; let i = index"
+            type="button"
+            class="indicator"
+            [class.active]="i === currentMovieIndex"
+            (click)="goToSlide(i)"
+            [attr.aria-label]="'Đi đến slide ' + (i + 1)">
+    </button>
+  </div>
+
+  <!-- Slide Counter -->
+  <div class="slide-counter" *ngIf="slideshowMovies.length > 1">
+    {{ currentMovieIndex + 1 }} / {{ slideshowMovies.length }}
+  </div>
+  <div class="auth-overlay" *ngIf="isShowPrompt" (click)="closeShowPrompt()">
+    <div class="auth-prompt" (click)="$event.stopPropagation()">
+      <h3>Trải nghiệm chưa trọn vẹn!</h3>
+      <p>Vui lòng đăng nhập hoặc đăng ký để khám phá toàn bộ tính năng và lưu lại danh sách phim của bạn.</p>
+      <div class="auth-prompt-actions">
+        <a routerLink="/login" class="prompt-button login">Đăng Nhập</a>
+        <a routerLink="/register" class="prompt-button register">Đăng Ký</a>
+      </div>
+    </div>
+  </div>
+</section>

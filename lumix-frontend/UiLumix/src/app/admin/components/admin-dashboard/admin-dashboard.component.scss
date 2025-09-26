@@ -1,0 +1,254 @@
+/* dashboard.component.css - Giao diện theo phong cách Netflix */
+
+// Bảng màu Netflix
+$netflix-red: #E50914;
+$netflix-red-light: #f87171;
+$netflix-dark-bg: #111827;
+$netflix-card-bg: #1f2937;
+$netflix-border: #374151;
+$netflix-text: rgba(255, 255, 255, 0.9);
+$netflix-text-muted: #9ca3af;
+$positive-color: #22c55e;
+$negative-color: #ef4444;
+
+/* Reset và base styles */
+* {
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Dashboard container */
+.dashboard-container {
+  padding: 1.5rem;
+  background-color: $netflix-dark-bg;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Dashboard header */
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  color: $netflix-text;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-message {
+  color: $netflix-text-muted;
+}
+
+.admin-name {
+  color: $netflix-red;
+  font-weight: 600;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Card base styles */
+.stat-card {
+  border-radius: 1rem;
+  border: 1px solid $netflix-border;
+  background-color: $netflix-card-bg;
+  padding: 1.25rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .stat-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Card hover effects */
+.stat-card:hover {
+  box-shadow: 0 0 25px rgba($netflix-red, 0.2);
+  transform: translateY(-4px);
+  border-color: rgba($netflix-red, 0.5);
+}
+
+/* Card icon */
+.card-icon {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s ease;
+  // Thống nhất style cho icon
+  background-color: rgba($netflix-red, 0.15);
+  color: $netflix-red;
+}
+
+.stat-card:hover .card-icon {
+  background-color: rgba($netflix-red, 0.25);
+  color: $netflix-red-light;
+}
+
+/* Card content */
+.card-content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.card-info h3,
+.card-info .card-label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: $netflix-text-muted;
+  margin: 0;
+}
+
+.card-info .stat-number {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: $netflix-text;
+  margin-bottom: 0;
+}
+
+/* Growth indicators */
+.growth-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem 0.125rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.growth-indicator.positive {
+  background-color: rgba($positive-color, 0.15);
+  color: $positive-color;
+}
+
+.growth-indicator.negative {
+  background-color: rgba($negative-color, 0.15);
+  color: $negative-color;
+}
+
+.growth-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: currentColor;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16rem;
+}
+
+.loading-spinner {
+  border: 2px solid $netflix-border;
+  border-top: 2px solid $netflix-red;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  animation: spin 1s linear infinite;
+}
+
+/* Placeholder card */
+.stat-card.placeholder {
+  opacity: 0.6;
+}
+
+.placeholder-text {
+  margin-top: 1.25rem;
+  color: $netflix-text-muted;
+}
+
+.placeholder-subtitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus states for accessibility */
+.stat-card:focus {
+  outline: 2px solid $netflix-red;
+  outline-offset: 2px;
+}
+
+/* FontAwesome icon sizing */
+.fas {
+  font-size: 1.25rem;
+}
+
+/* Additional utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
