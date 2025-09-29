@@ -35,10 +35,9 @@ export class LoginAdminComponent implements OnInit {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: () => {
         this.isLoading = false;
-        this.successMessage = 'Đăng nhập thành công!'
         setTimeout(()=>{
         this.router.navigate(['/admin/dashboard']);
-        },1500);
+        },1000);
       }, error: () => {
         this.isLoading = false;
         this.error = "Đăng nhập thất bại. Hãy kiểm tra lại tài khoản hoặc mật khẩu của bạn!"

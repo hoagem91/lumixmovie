@@ -3,7 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';// 1. Import environment
 import {LoginResponse, RegisterResponse} from '../models/auth.model';
 import {environment} from "../../environments/environment";
-import {Router} from "@angular/router"; // 2. Import interface (giả sử đã tạo file)
+import {Router} from "@angular/router";
+import {map} from "rxjs/operators"; // 2. Import interface (giả sử đã tạo file)
 
 @Injectable({
   providedIn: 'root',
@@ -40,13 +41,28 @@ export class AuthService {
       })
     );
   }
+  refresh(): Observable<any> {
+    return this.http.post(`${this.authUrl}/refresh`, {}, { withCredentials: true });
+  }
 
   logout(): void {
-    localStorage.removeItem(this.USERNAME_KEY);
-    localStorage.removeItem(this.USER_ID_KEY);
-    localStorage.removeItem(this.ROLE_KEY);
-    localStorage.removeItem('rememberMe');
-    this.router.navigate(['/login'])
+    this.http.post(`${this.authUrl}/logout`,{},{withCredentials:true}).subscribe({
+      next:()=>{
+        localStorage.removeItem(this.USERNAME_KEY);
+        localStorage.removeItem(this.USER_ID_KEY);
+        localStorage.removeItem(this.ROLE_KEY);
+        localStorage.removeItem('rememberMe');
+        this.router.navigate(['/login'])
+      },
+      error:(err)=>{
+        console.error("Logout failed:", err);
+        localStorage.removeItem(this.USERNAME_KEY);
+        localStorage.removeItem(this.USER_ID_KEY);
+        localStorage.removeItem(this.ROLE_KEY);
+        localStorage.removeItem('rememberMe');
+        this.router.navigate(['/login']);
+      }
+    })
   }
 
   register(username: string, password: string, email: string): Observable<RegisterResponse> {

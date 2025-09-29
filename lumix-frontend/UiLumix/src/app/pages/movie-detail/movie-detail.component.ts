@@ -267,6 +267,8 @@ export class MovieDetailComponent implements OnInit {
 
   private updateCurrentProgress(isFinished: boolean) {
     if (!this.movie || !this.videoPlayer) return;
+    if(!this.authService.isLoggedIn()) return;
+
     const video = this.videoPlayer.nativeElement;
     const currentTime = isFinished ? video.duration : video.currentTime;
 

@@ -41,7 +41,7 @@ export class MovieService {
   }
 
   getAllMovies(): Observable<Movie[]> {
-    return this.http.get<ApiResponse<Movie[]>>(`${this.movieBaseUrl}/all`).pipe(
+    return this.http.get<ApiResponse<Movie[]>>(`${this.movieBaseUrl}/all`,{withCredentials:true}).pipe(
       map(res => res.result)
     );
   }
@@ -107,7 +107,7 @@ export class MovieService {
   }
 
   getAllComment(): Observable<CommentModel[]> {
-    return this.http.get<ApiResponse<CommentModel[]>>(`${this.adminBaseUrl}/comments`).pipe(
+    return this.http.get<ApiResponse<CommentModel[]>>(`${this.adminBaseUrl}/comments`,{withCredentials:true}).pipe(
       map(res => res.result),
       catchError(this.handleError)
     )
@@ -175,7 +175,7 @@ export class MovieService {
       if (dateFrom) httpParams = httpParams.set('startDate', new Date(dateFrom).toISOString());
       if (dateTo) httpParams = httpParams.set('endDate', new Date(dateTo).toISOString());
 
-      return this.http.get<ApiResponse<CommentModel[]>>(`${this.adminBaseUrl}/search/comments`, {params: httpParams}).pipe(
+      return this.http.get<ApiResponse<CommentModel[]>>(`${this.adminBaseUrl}/search/comments`, {params: httpParams,withCredentials:true}).pipe(
         map(res => res.result || []),
         catchError(() => of([]))
         );

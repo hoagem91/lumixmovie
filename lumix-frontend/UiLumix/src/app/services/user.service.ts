@@ -64,7 +64,7 @@ export class UserService {
   }
 
   postFavoriteMovie(userId: string, movieId: string): Observable<any> {
-    return this.http.post<ApiResponse<any>>(`${this.userApiUrl}/${userId}/favorites/${movieId}`, null).pipe(
+    return this.http.post<ApiResponse<any>>(`${this.userApiUrl}/${userId}/favorites`, {movieId}).pipe(
       catchError(this.handleError)
     )
   }
