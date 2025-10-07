@@ -30,6 +30,12 @@ import { HistoryCardComponent } from './components/history-card/history-card.com
 import { VerifyAccountComponent } from './pages/verify-account/verify-account.component';
 import { LoginSuccessComponent } from './pages/login-success/login-success.component';
 import {AdminModule} from "./admin/admin.module";
+import { CategoryCardsComponent } from './components/category-cards/category-cards.component';
+import { MovieGridComponent } from './components/movie-grid/movie-grid.component';
+import { TopMoviesComponent } from './components/top-movies/top-movies.component';
+import { DashboardCommentComponent } from './components/dashboard-comment/dashboard-comment.component';
+import { PopupComponent } from './components/popup/popup.component';
+import { CommentThreadComponent } from './components/comment-thread/comment-thread.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +60,13 @@ import {AdminModule} from "./admin/admin.module";
     WatchHistoryComponent,
     HistoryCardComponent,
     VerifyAccountComponent,
-    LoginSuccessComponent
+    LoginSuccessComponent,
+    CategoryCardsComponent,
+    MovieGridComponent,
+    TopMoviesComponent,
+    DashboardCommentComponent,
+    PopupComponent,
+    CommentThreadComponent
   ],
     imports: [
         BrowserModule,

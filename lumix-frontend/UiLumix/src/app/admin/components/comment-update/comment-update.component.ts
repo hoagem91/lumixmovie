@@ -48,7 +48,7 @@ export class CommentUpdateComponent implements OnInit, OnChanges {
     this.isUpdating = true;
     const newContent = this.commentForm.value.content;
 
-    this.movieService.updateCommentModal( this.commentToEdit.movie.id,this.commentToEdit.id, newContent).pipe(
+    this.movieService.updateCommentModal( this.commentToEdit.movieId,this.commentToEdit.id, newContent).pipe(
       finalize(() => this.isUpdating = false)
     ).subscribe({
       next: (updatedComment) => {

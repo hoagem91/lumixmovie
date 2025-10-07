@@ -10,6 +10,7 @@ import {ProfileComponent} from "./pages/profile/profile.component";
 import {WatchHistoryComponent} from "./pages/watch-history/watch-history.component";
 import {VerifyAccountComponent} from "./pages/verify-account/verify-account.component";
 import {LoginSuccessComponent} from "./pages/login-success/login-success.component";
+import {MovieGridComponent} from "./components/movie-grid/movie-grid.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'movies', component: MovieComponent},
   {path: 'register', component: RegisterComponent},
   {path:'movies/:id',component:MovieDetailComponent},
+  {path:'category/:slug',component:MovieGridComponent},
   {path:'favorites',component:FavoritesComponent},
   {path:"profile",component:ProfileComponent},
   {path:'history',component:WatchHistoryComponent},

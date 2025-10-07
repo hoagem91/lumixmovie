@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String>, JpaSpecificationExecutor<Comment> {
     List<Comment> findByMovieIdOrderByCreatedAtDesc(String movieId);
+    List<Comment> findByMovieIdAndParentIsNullOrderByCreatedAtDesc(String movieId);
+    List<Comment> findByMovieIdAndParentIsNull(String movieId);
+    List<Comment> findByParentId(String parentId);
 }

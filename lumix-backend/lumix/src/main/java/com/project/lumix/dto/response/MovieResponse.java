@@ -17,4 +17,6 @@ public class MovieResponse {
     private String year;
     private String rating;
     private String createdAt;
+
+
 }

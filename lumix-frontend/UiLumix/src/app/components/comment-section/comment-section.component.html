@@ -1,59 +1,62 @@
 <div class="comments-container">
   <h3>Bình Luận ({{ comments.length }})</h3>
 
-  <div class="comment-form-wrapper" *ngIf="authService.isLoggedIn();else showLoginForm">
+  <!-- Form nhập bình luận chính -->
+  <div class="comment-form-wrapper" *ngIf="authService.isLoggedIn(); else showLoginForm">
     <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
-      <textarea
-        formControlName="content"
-        placeholder="Viết bình luận..."
-        rows="4">
-      </textarea>
+      <textarea formControlName="content" placeholder="Viết bình luận..." rows="4"></textarea>
       <div class="form-actions">
         <span *ngIf="commentForm.get('content')?.hasError('minLength')" class="error-text">
-           Bình luận phải có ít nhất 3 ký tự.
+          Bình luận phải có ít nhất 3 ký tự.
         </span>
-        <button type="submit" [disabled]="commentForm.invalid|| isSubmitting">
+        <button type="submit" [disabled]="commentForm.invalid || isSubmitting">
           <span *ngIf="!isSubmitting">Bình luận</span>
           <span *ngIf="isSubmitting" class="spinner-small"></span>
         </button>
       </div>
     </form>
   </div>
+
   <ng-template #showLoginForm>
     <div class="login-prompt">
       Vui lòng <a routerLink="/login">đăng nhập</a> để bình luận.
     </div>
   </ng-template>
 
-  <!-- Danh sach cac binh luan -->
+  <!-- Danh sách bình luận -->
   <div class="comments-list">
     <div *ngIf="loading" class="loading-state">
       <div class="spinner"></div>
       <span>Đang tải bình luận ...</span>
     </div>
 
-    <div *ngIf="!loading&&error" class="error-state">
+    <div *ngIf="!loading && error" class="error-state">
       <p>{{ error }}</p>
       <button (click)="loadComments()">Thử lại</button>
     </div>
 
     <div *ngIf="!loading && comments.length === 0 && !error" class="empty-state">
-      <p>Không có bình luận nào.Hãy là người đầu tiên</p>
+      <p>Không có bình luận nào. Hãy là người đầu tiên!</p>
     </div>
 
+    <!-- Bình luận chính -->
     <div *ngFor="let comment of comments" class="comment-item">
+      <!-- Header -->
       <div class="comment-author">
         <i class="fas fa-user-circle author-avatar"></i>
         <div class="author-info">
           <span class="author-name">{{ comment.username }}</span>
-          <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+          <span class="comment-date">{{ comment.createdAt | date: 'short' }}</span>
         </div>
       </div>
+
+      <!-- Nội dung -->
       <div class="comment-content">
-        <ng-container *ngIf="editingCommentId != comment.id">
+        <ng-container *ngIf="editingCommentId !== comment.id; else editingBlock">
           {{ comment.content }}
         </ng-container>
-        <ng-container *ngIf="editingCommentId === comment.id">
+
+        <ng-template #editingBlock>
           <textarea class="edit-textarea" [(ngModel)]="editingContent" rows="3"></textarea>
           <div class="edit-actions">
             <button class="cancel-btn" (click)="cancelEdit()">Huỷ</button>
@@ -62,34 +65,79 @@
               {{ isUpdating ? 'Đang lưu...' : 'Lưu' }}
             </button>
           </div>
-        </ng-container>
+        </ng-template>
       </div>
-      <button
-        class="dot-btn"
-        (click)="toggleCommentMenu(comment.id,$event)"
-      >
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-      </button>
-      <div
-        class="comment-menu-dropdown"
-        *ngIf="openMenuCommentId === comment.id"
-        (click)="$event.stopPropagation()">
-        <button class="action-btn" (click)="startEdit(comment)">
-          <i class="fas fa-pencil-alt"></i>
-          <span>Sửa</span>
+
+      <!-- Hành động -->
+      <div class="comment-actions">
+        <!-- Like -->
+        <button
+          class="action-button like-btn"
+          [class.active]="comment.userReaction === 'LIKE'"
+          (click)="toggleLike(comment.id)"
+          [disabled]="!authService.isLoggedIn()">
+          <i class="fas fa-thumbs-up"></i>
+          <span>{{ comment.likeCount || 0 }}</span>
         </button>
-        <button class="action-btn delete-btn" (click)="askForDeleteConfirm(comment.id)">
-          <i class="fas fa-trash"></i>
-          <span>Xóa</span>
+
+        <!-- Dislike -->
+        <button
+          class="action-button dislike-btn"
+          [class.active]="comment.userReaction === 'DISLIKE'"
+          (click)="toggleDislike(comment.id)"
+          [disabled]="!authService.isLoggedIn()">
+          <i class="fas fa-thumbs-down"></i>
+          <span>{{ comment.dislikeCount || 0 }}</span>
         </button>
+
+        <!-- Trả lời -->
+        <button
+          class="action-button reply-btn"
+          (click)="toggleReply(comment.id)"
+          *ngIf="authService.isLoggedIn()">
+          <i class="fas fa-reply"></i>
+          <span>Trả lời</span>
+        </button>
+      </div>
+
+      <!-- Form trả lời -->
+      <div *ngIf="replyingToCommentId === comment.id" class="reply-form">
+        <textarea [(ngModel)]="replyContent" placeholder="Nhập nội dung trả lời..."></textarea>
+        <div class="reply-actions">
+          <button (click)="cancelReply()">Huỷ</button>
+          <button (click)="sendReply(comment.id)" [disabled]="!replyContent.trim() || isSending">
+            <span *ngIf="!isSending">Gửi</span>
+            <i *ngIf="isSending" class="fas fa-spinner fa-spin"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nút xem thêm -->
+      <div *ngIf="comment.replies?.length" class="toggle-replies">
+        <button (click)="toggleReplies(comment.id)">
+          {{ expandedComments[comment.id] ? 'Ẩn bớt' : 'Xem thêm ' + comment.replies.length + ' trả lời' }}
+        </button>
+      </div>
+
+      <!-- Replies (ẩn/hiện bằng toggle) -->
+      <div class="replies" *ngIf="expandedComments[comment.id]">
+        <app-comment-thread
+          *ngFor="let reply of comment.replies"
+          [comment]="reply"
+          [movieId]="movieId"
+          [rootUsername]="reply.username"
+          (onReplySubmitted)="handleNewReply($event, comment.id)">
+        </app-comment-thread>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Popup xác nhận xóa -->
 <app-prompt-message
   [isVisible]="isVisiable"
   [title]="promptTitle"
   [message]="promptMessage"
   confirmButtonText="Xóa"
-  (onConfirm)="deleteComment()"
-></app-prompt-message>
+  (onConfirm)="deleteComment()">
+</app-prompt-message>

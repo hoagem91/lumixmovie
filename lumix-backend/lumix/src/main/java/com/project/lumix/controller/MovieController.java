@@ -3,7 +3,9 @@ import java.util.List;
 
 import com.project.lumix.dto.request.MovieSearchRequest;
 import com.project.lumix.dto.response.ApiResponse;
+import com.project.lumix.dto.response.CommentResponse;
 import com.project.lumix.dto.response.MovieDetailResponse;
+import com.project.lumix.service.CommentService;
 import com.project.lumix.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
-
+    private final CommentService commentService;
     // ===== MOVIE DETAILS =====
     @GetMapping("/{movieId}")
     public ApiResponse<MovieDetailResponse> getMovie(@PathVariable String movieId) {
@@ -86,6 +88,15 @@ public class MovieController {
         log.info("Get movies by multiple genres: {}", genres);
         return ApiResponse.<List<MovieDetailResponse>>builder()
                 .result(movieService.getMoviesByGenreNames(genres))
+                .build();
+    }
+
+//    COMMENT
+    @GetMapping("/comments")
+    public ApiResponse<List<CommentResponse>> getAllComments() {
+        log.info("Admin fetching all comments");
+        return ApiResponse.<List<CommentResponse>>builder()
+                .result(commentService.getAllComment())
                 .build();
     }
 }

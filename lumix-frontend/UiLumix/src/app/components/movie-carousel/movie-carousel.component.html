@@ -1,6 +1,12 @@
 <section class="movie-section">
   <div class="section-header">
-    <h2 class="section-title">{{ title }}</h2>
+    <div class="section-title-container">
+      <h2 class="section-title">{{ title }}</h2>
+      <div class="see-all-link">
+        <span class="see-all-text">Xem tất cả</span>
+        <i class="fas fa-angle-right"></i>
+      </div>
+    </div>
     <div class="section-controls">
       <button class="control-btn" (click)="scrollLeft()">‹</button>
       <button class="control-btn" (click)="scrollRight()">›</button>
@@ -17,6 +23,7 @@
            (mouseleave)="onMouseLeave()"
            (click)="onMovieClick(item)"
       >
+        <!--Poster Image-->
         <div class="movie-poster">
           <img [src]="item.posterUrl"
                [alt]="item.title"

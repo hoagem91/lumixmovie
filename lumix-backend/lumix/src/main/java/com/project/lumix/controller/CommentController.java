@@ -50,7 +50,7 @@ public class CommentController {
     }
 
     @DeleteMapping({"/{commentId}"})
-    public ApiResponse<Void> deleteComment(@PathVariable String movieId, @PathVariable String commentId) {
+    public ApiResponse<Void> deleteComment(@PathVariable String commentId) {
         log.info("Delete comment: {}", commentId);
         this.commentService.deleteComment(commentId);
         return ApiResponse.<Void>builder()

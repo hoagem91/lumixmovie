@@ -1,6 +1,7 @@
 package com.project.lumix.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,14 @@ public class CommentResponse {
     private String username;
     private String userId;
     private String email;
-    private MovieResponse movie;
+    private String movieId;
+    private String posterUrl;
+    private String movieTitle;
+    private String year;
+    private String parentId;
+    private String parentName;
+    private List<CommentResponse> replies;
+    private long likeCount;
+    private long dislikeCount;
+    private String userReaction;
 }

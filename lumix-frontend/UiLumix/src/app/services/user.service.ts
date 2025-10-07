@@ -2,11 +2,11 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
-import {ApiResponse} from "./movie.service";
 import {catchError, map} from "rxjs/operators";
 import {Movie} from "../models/movie.model";
 import {User} from "../models/user.model";
 import {NotificationService} from "./notification.service";
+import {ApiResponse} from "../models/ApiResponse.model";
 
 @Injectable({providedIn: "root"})
 export class UserService {

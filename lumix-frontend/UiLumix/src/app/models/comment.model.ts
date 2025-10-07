@@ -6,8 +6,22 @@ export interface CommentModel{
   content:string,
   createdAt:string,
   updatedAt?:string,
-  movie:Movie,
+  movieId:string,
+  movieTitle:string,
+  posterUrl:string,
+  year:string,
   username:string,
   userId:string,
-  email:string
+  email:string,
+  parentName:string,
+  replies:CommentModel[],
+  likeCount:number,
+  dislikeCount:number,
+  userReaction:'LIKE'|'DISLIKE'|null;
+}
+export interface CommentReaction{
+  id:string,
+  commentId:string,
+  userId:string,
+  isLike:boolean
 }

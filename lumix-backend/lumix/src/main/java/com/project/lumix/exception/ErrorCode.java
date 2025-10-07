@@ -36,6 +36,10 @@ public enum ErrorCode {
 
     // Role
     ROLE_NOT_FOUND(1014, "Role not found", HttpStatus.NOT_FOUND),
+
+    // ====== SERVER / SYSTEM ======
+    INTERNAL_SERVER_ERROR(5000, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
+    DATABASE_ERROR(5001, "Database error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     ;
     private final int code;
     private final String message;

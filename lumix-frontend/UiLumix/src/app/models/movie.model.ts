@@ -1,3 +1,5 @@
+import {CommentModel} from "./comment.model";
+
 export interface Movie{
   id:string;
   title: string;
@@ -25,12 +27,15 @@ export interface Actor{
   name:string;
 }
 export interface Comment {
-  id:string;
-  content:string;
-  createdAt:string;
-  updatedAt?:string;
-  userId:string;
-  username:string;
+  id:string,
+  content:string,
+  createdAt:string,
+  updatedAt?:string,
+  movie:Movie,
+  username:string,
+  userId:string,
+  email:string,
+  replies:CommentModel[],
 }
 export interface WatchHistory{
   id:string;

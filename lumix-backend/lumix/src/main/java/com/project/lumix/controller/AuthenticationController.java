@@ -77,14 +77,14 @@ public class AuthenticationController {
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(COOKIE_SECURE)
-                .path("/auth/refresh")
+                .path("/")
+                .domain("localhost")
                 .maxAge(Duration.ofSeconds(REFRESH_DURATION))
-                .sameSite("Lax")
+                .sameSite("None")
                 .build();
 
         httpServletResponse.addHeader("Set-Cookie", refreshTokenCookie.toString());
         httpServletResponse.addHeader("Set-Cookie", accessTokenCookie.toString());
-
         AuthenticationResponse responseData = AuthenticationResponse.builder()
                 .authenticated(true)
                 .userId(user.getUserId())

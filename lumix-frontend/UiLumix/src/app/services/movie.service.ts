@@ -5,10 +5,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Comment, Genre, Movie, WatchHistory} from "../models/movie.model";
 import {environment} from "../../environments/environment";
 import {CommentModel} from "../models/comment.model";
-
-export interface ApiResponse<T> {
-  result: T;
-}
+import {ApiResponse} from "../models/ApiResponse.model";
 
 @Injectable({
   providedIn: 'root',
@@ -107,29 +104,31 @@ export class MovieService {
   }
 
   getAllComment(): Observable<CommentModel[]> {
-    return this.http.get<ApiResponse<CommentModel[]>>(`${this.adminBaseUrl}/comments`,{withCredentials:true}).pipe(
+    return this.http.get<ApiResponse<CommentModel[]>>(`${this.movieBaseUrl}/comments`,{withCredentials:true}).pipe(
       map(res => res.result),
       catchError(this.handleError)
     )
   }
 
-  getCommentsForMovie(movieId: string): Observable<Comment[]> {
-    return this.http.get<ApiResponse<Comment[]>>(`${this.movieBaseUrl}/${movieId}/comments`).pipe(
+  getCommentsForMovie(movieId: string): Observable<CommentModel[]> {
+    return this.http.get<ApiResponse<CommentModel[]>>(`${this.movieBaseUrl}/${movieId}/comments`).pipe(
       map(res => res.result || []),
       catchError(this.handleError)
     )
   }
 
-  postComment(movieId: string, content: string): Observable<Comment> {
-    return this.http.post<ApiResponse<Comment>>(`${this.movieBaseUrl}/${movieId}/comments`, {content}).pipe(
+  postComment(movieId: string, content: string,parentId?:string): Observable<CommentModel> {
+    const payload :{content:string,parentId?:string} = {content}
+    if(parentId) payload.parentId = parentId;
+    return this.http.post<ApiResponse<CommentModel>>(`${this.movieBaseUrl}/${movieId}/comments`, payload).pipe(
       map(res => res.result),
       catchError(this.handleError)
     )
   }
 
-  updateComment(movieId: string, commentId: string, content: string): Observable<Comment> {
+  updateComment(movieId: string, commentId: string, content: string): Observable<CommentModel> {
     const payload = {content: content};
-    return this.http.put<ApiResponse<Comment>>(`${this.movieBaseUrl}/${movieId}/comments/${commentId}`, payload).pipe(
+    return this.http.put<ApiResponse<CommentModel>>(`${this.movieBaseUrl}/${movieId}/comments/${commentId}`, payload).pipe(
       map(res => res.result),
       catchError(this.handleError)
     )

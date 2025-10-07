@@ -19,11 +19,11 @@
           <div class="info-block">
             <h6>Thông tin phim</h6>
             <div class="d-flex align-items-center mb-3">
-              <img [src]="commentToEdit?.movie?.posterUrl" [alt]="commentToEdit?.movie?.title"
+              <img [src]="commentToEdit?.posterUrl" [alt]="commentToEdit?.movieTitle"
                    class="me-3 movie-poster-modal">
               <div>
-                <div class="fw-bold">{{ commentToEdit?.movie?.title }}</div>
-                <div class="text-muted">{{ commentToEdit?.movie?.year | date:'yyyy' }}</div>
+                <div class="fw-bold">{{ commentToEdit?.movieTitle}}</div>
+                <div class="text-muted">{{ commentToEdit?.year| date:'yyyy' }}</div>
               </div>
             </div>
           </div>

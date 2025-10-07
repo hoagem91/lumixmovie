@@ -3,6 +3,7 @@ import {Genre, Movie} from "../../models/movie.model";
 import {MovieService} from "../../services/movie.service";
 import {forkJoin, of} from "rxjs";
 import {catchError} from "rxjs/operators";
+import {CommentModel} from "../../models/comment.model";
 
 @Component({
   selector: 'app-movie',
@@ -19,6 +20,7 @@ export class MovieComponent implements OnInit {
   cartoonMovies:Movie[]=[];
   popularMovies:Movie[]=[];
   proposeMovies:Movie[]=[];
+  comments:CommentModel[]=[];
   loading = true;
   error: string | null = null;
 

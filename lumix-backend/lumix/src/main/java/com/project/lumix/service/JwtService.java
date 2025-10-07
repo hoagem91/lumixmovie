@@ -182,7 +182,7 @@ public class JwtService {
             ResponseCookie refreshTokenCookie = ResponseCookie.from(REFRESH_COOKIE_NAME, newRefreshToken)
                     .httpOnly(true)
                     .secure(COOKIE_SECURE)
-                    .path("/lumix/auth/refresh")
+                    .path("/")
                     .maxAge(Duration.ofSeconds(REFRESH_DURATION))
                     .sameSite("None")
                     .build();

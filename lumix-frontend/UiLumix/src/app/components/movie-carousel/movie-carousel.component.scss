@@ -10,12 +10,63 @@
   padding: 0 1rem;
 }
 
+.section-title-container {
+  display: flex;
+  align-items: center;
+}
+
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
   color: white;
   border-left: 4px solid #e50914;
   padding-left: 1rem;
+}
+
+.see-all-link {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  color: #ffd875;
+  font-size: 0.8rem;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid #fff1;
+  border-radius: 20px;
+  padding: 9px;
+  margin-left: 10px;
+
+  .see-all-text {
+    max-width: 0;
+    opacity: 0;
+    white-space: nowrap;
+    transition: max-width 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    margin-right: 0;
+  }
+
+  i {
+    transition: transform 0.4s ease-in-out;
+    font-size: 1rem;
+    color: #ffffff;
+  }
+
+  // Khi hover vào link
+  &:hover {
+    border: 1px solid #ffd875;
+
+    .see-all-text {
+      // Hiện ra
+      max-width: 100px; // Chiều rộng tối đa của văn bản
+      opacity: 1;
+      margin-right: 8px; // Tạo khoảng cách với mũi tên
+    }
+
+    i {
+      // Có thể thêm hiệu ứng cho mũi tên nếu muốn
+      transform: translateX(4px);
+      color: #ffd875;
+    }
+  }
 }
 
 .section-controls {
@@ -70,6 +121,7 @@
   z-index: 1;
 
   &.hovered {
+    padding: 0 50px;
     z-index: 20;
   }
 }
@@ -374,7 +426,7 @@
   .hero-controls {
     right: 20px;
   }
-  .section-title{
+  .section-title {
     font-size: 20px;
   }
   .movie-card {

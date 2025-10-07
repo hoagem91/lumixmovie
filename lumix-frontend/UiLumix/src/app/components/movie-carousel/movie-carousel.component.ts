@@ -13,6 +13,7 @@ import {NotificationService} from "../../services/notification.service";
 })
 export class MovieCarouselComponent implements OnInit {
   @Input() title: string = '';
+  @Input() subTitle: string = '';
   @Input() movies: any[] = [];
   @Input() isGenre: boolean = false;
   width!: string;
@@ -26,7 +27,7 @@ export class MovieCarouselComponent implements OnInit {
   processingMovieIds = new Set<string>;
   @ViewChild("movieContainer") movieContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('videoPlayer') videoPlayers!: ElementRef<HTMLVideoElement>;
-
+  currentIndex = 0;
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -81,14 +82,19 @@ export class MovieCarouselComponent implements OnInit {
   scrollLeft()
     :
     void {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
     const container = this.movieContainer.nativeElement;
     const scrollAmount = container.clientWidth * 0.8;
     container.scrollBy({left: -scrollAmount, behavior: 'smooth'});
   }
-
   scrollRight()
     :
     void {
+    if (this.currentIndex < this.movies.length) {
+      this.currentIndex++;
+    }
     const container = this.movieContainer.nativeElement;
     const scrollAmount = container.clientWidth * 0.8;
     container.scrollBy({left: scrollAmount, behavior: 'smooth'});
@@ -191,5 +197,8 @@ export class MovieCarouselComponent implements OnInit {
       },
       complete: () => this.processingMovieIds.delete(movie.id)
     })
+  }
+  onSeeAllClick(){
+    this.router.navigate([`/category/${this.subTitle}`]);
   }
 }
