@@ -1,0 +1,257 @@
+.comment-container {
+  margin-left: 60px;
+  padding: 12px 0 12px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+
+  // Header với tên và thời gian
+  .comment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+
+    strong {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    small {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  // Nội dung bình luận
+  .comment-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    word-wrap: break-word;
+  }
+
+  // Các nút hành động
+  /* Comment Actions */
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 8px;
+
+    .action-button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #65676b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      i {
+        font-size: 14px;
+      }
+
+      span {
+        line-height: 1;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      // Like button
+      &.like-btn {
+        &:hover{
+          color: #ffffff;
+          i {
+            color: #ffffff;
+          }
+        }
+        &.active {
+          color: #ffffff;
+          i {
+            color: #fff;
+          }
+        }
+      }
+
+      // Dislike button
+      &.dislike-btn {
+        &:hover{
+          color: #ffffff;
+          i {
+            color: #ffffff;
+          }
+        }
+        &.active {
+          color: #ffffff;
+
+          i {
+            color: #fff;
+          }
+        }
+      }
+
+      // Reply button
+      &.reply-btn {
+        color: #65676b;
+
+        &:hover:not(:disabled) {
+          color: #fff;
+        }
+      }
+    }
+
+    .reply-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        color: #ffffff;
+      }
+
+      &.active {
+        color: #e50914;
+        font-weight: 600;
+      }
+    }
+  }
+
+  // Form trả lời
+  .reply-form {
+    margin-top: 16px;
+
+    textarea {
+      width: 100%;
+      min-height: 60px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: #e50914;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+
+    .reply-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+
+      button {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        // Nút Hủy
+        &:first-child {
+          background: rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.8);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+
+        // Nút Gửi
+        &:last-child {
+          background: linear-gradient(45deg, #e50914, #f40612);
+          color: white;
+
+          &:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+          }
+
+          i {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+        }
+      }
+    }
+  }
+
+  // Phần replies (đệ quy)
+  .replies {
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .replies {
+      margin-left: 10px;
+      padding-left: 12px;
+    }
+
+    .comment-header {
+      flex-wrap: wrap;
+    }
+
+    .comment-body {
+      font-size: 13px;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

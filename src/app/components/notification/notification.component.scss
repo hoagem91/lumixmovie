@@ -1,0 +1,92 @@
+// F:/.../notification.component.scss
+
+.notification-container {
+  position: fixed;
+  top: 80px; // Cách top một khoảng để không bị header che
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 350px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &.success {
+    background-color: #2e7d32;
+  }
+  &.error {
+    background-color: #c62828;
+  }
+  &.info {
+    background-color: #0277bd;
+  }
+  &.warning {
+    background-color: #f9a825;
+    color: #ffffff;
+  }
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  flex-grow: 1;
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.6rem;
+  line-height: 1;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 0 0 0 15px;
+  align-self: flex-start; // Căn nút lên trên
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Thanh thời gian chạy
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  // Áp dụng animation
+  animation-name: progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+// Định nghĩa animation cho thanh progress
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

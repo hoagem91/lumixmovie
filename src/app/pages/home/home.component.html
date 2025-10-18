@@ -1,0 +1,103 @@
+<!-- movie-home.component.html -->
+<app-header></app-header>
+<div class="page-container loading-container" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Đang tải dữ liệu phim...</p>
+</div>
+<div class="page-container error-container" *ngIf="!loading && error">
+  <i class="fas fa-exclamation-triangle"></i>
+  <p>{{ error }}</p>
+  <button (click)="loadInitialData()">Thử lại</button>
+</div>
+<div class="movie-home">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-background">
+      <div class="movie-grid" *ngIf="!loading">
+        <div class="movie-card" *ngFor="let movie of backgroundMovies">
+          <img [src]="movie.posterUrl" [alt]="movie.title">
+        </div>
+      </div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <a class="cta-button" routerLink="/movies">
+        <i class="fas fa-play"></i>
+        Xem Chi Tiết
+      </a>
+    </div>
+  </section>
+  <div class="section-history" *ngIf="!loading&&!error&&historyItems.length>0">
+    <h2 class="section-title">Xem tiếp của bạn</h2>
+    <div class="history-grid">
+      <app-history-card
+        *ngFor="let item of historyItems"
+        [historyItem]="item"
+        (deleted)="handleItemDelete($event)"
+      >
+      </app-history-card>
+    </div>
+  </div>
+  <!-- Categories Section -->
+  <section class="categories" *ngIf="!loading">
+    <div class="container">
+      <div class="section-header">
+        <h2>Khám phá các thể loại đa dạng của chúng tôi</h2>
+        <p>Dù bạn đang tìm một bộ phim hài để thư giãn, một bộ phim chính kịch để suy ngẫm, hay một bộ phim tài liệu để học hỏi điều mới</p>
+        <div class="navigation-arrows">
+          <button class="nav-arrow prev" (click)="previousCategory()"
+                  [disabled]="currentCategoryIndex === 0">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="nav-arrow next" (click)="nextCategory()"
+                  [disabled]="currentCategoryIndex >= genres.length - maxCategoriesVisible">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="categories-container">
+      <div class="categories-slider" [@slideAnimation]="currentCategoryIndex">
+        <ng-container *ngIf="!loading;else skeletonCategories">
+          <div class="category-card"
+               *ngFor="let category of genres | slice:currentCategoryIndex:(currentCategoryIndex + maxCategoriesVisible)">
+            <div class="category-header">
+              <div class="category-movies-grid">
+                <div class="movie-poster" *ngFor="let movie of category.movies.slice(0, 4); let i = index"
+                     [class.large]="i === 0">
+                  <img [src]="movie.posterUrl" [alt]="movie.title">
+                </div>
+              </div>
+              <div class="category-overlay"></div>
+            </div>
+            <div class="category-info">
+              <h3>{{ category.name }}</h3>
+              <button class="arrow-button" (click)="viewCategory(category)">
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #skeletonCategories>
+          <ng-container *skeleton="true;repeat:updateVisibleCategories();className:'category-card';height:'265px';width:'240px'"></ng-container>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div class="loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Đang tải nội dung...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error" *ngIf="error">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+    <button (click)="ngOnInit()">Thử lại</button>
+  </div>
+</div>
+<app-footer></app-footer>

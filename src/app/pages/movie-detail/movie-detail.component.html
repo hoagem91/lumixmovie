@@ -1,0 +1,131 @@
+<app-header></app-header>
+
+<div class="page-container" *ngIf="loading">
+  <div class="spinner"></div>
+</div>
+
+<div class="page-container" *ngIf="error">
+  <div class="error-container">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+  </div>
+</div>
+
+<div class="movie-detail-container" *ngIf="movie">
+  <!-- Background -->
+  <div class="backdrop">
+    <img [src]="movie.posterUrl" [alt]="movie.title">
+    <div class="backdrop-overlay"></div>
+  </div>
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+  <!-- Content -->
+  <div class="detail-content">
+    <div class="poster">
+      <img [src]="movie.posterUrl" [alt]="movie.title">
+    </div>
+    <div class="info">
+      <h1 class="title">{{ movie.title }}</h1>
+      <div class="meta">
+        <span class="rating"><i class="fas fa-star"></i> {{ movie.rating }}</span>
+        <span class="year">{{ movie.year | date:'yyyy' }}</span>
+        <span class="duration">{{ movie.duration }}</span>
+      </div>
+      <p class="description">{{ movie.description }}</p>
+      <div class="genres">
+        <span *ngFor="let genre of movie.genres" class="genre-tag">{{ genre }}</span>
+      </div>
+      <div class="actions">
+        <button class="action-btn play-btn" (click)="playVideo()">
+          <i class="fas fa-play"></i>
+          <span>Phát</span>
+        </button>
+        <button
+          class="action-btn add-btn"
+          [class.is-favorite]="isFavorite(movie.id)"
+          (click)="toggleFavorite(movie, $event)"
+          [disabled]="isProcessing(movie.id)"
+          title="isFavorite(movie.id) ? 'Xóa khỏi danh sách yêu thích' : 'Thêm vào danh sách yêu thích'"
+        >
+          <i *ngIf="isProcessing(movie.id)" class="fas fa-spinner fa-spin"></i>
+          <ng-container *ngIf="!isProcessing(movie.id) && !isFavorite(movie.id)">
+            <i class="fas fa-heart"></i>
+            <span>Yêu thích</span>
+          </ng-container>
+          <ng-container *ngIf="!isProcessing(movie.id) && isFavorite(movie.id)">
+            <i class="fas fa-heart" style="color: red;"></i>
+            <span style="color: red;">Yêu thích</span>
+          </ng-container>
+        </button>
+        <button class="action-btn comment-btn" (click)="scrollToComments(commentSectionContainer)">
+          <i class="fas fa-comment"></i>
+          <span>Bình luận</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Player Section -->
+  <div class="video-section" *ngIf="movie.videoUrl" #videoSection>
+    <h2>Trailer & Video</h2>
+    <div class="video-player" (mouseenter)="onPlayerMouseEnter()" (mouseleave)="onPlayerMouseLeave()">
+      <video
+        #videoPlayer
+        [src]="movie.videoUrl"
+        controls
+        muted
+        loop
+        (play)="onVideoPlay()"
+        (pause)="onVideoPause()"
+        (timeupdate)="onTimeUpdate()"
+        (ended)="onVideoEnded()"
+      ></video>
+      <div class="video-overlay" *ngIf="!isVideoPlaying" (click)="playVideo()">
+        <i class="fas fa-play-circle"></i>
+      </div>
+      <div class="video-seek-controls" *ngIf="showSeekControls">
+        <button class="seek-btn" (click)="seekVideo(-10)">
+          <i class="fas fa-undo" style="font-size: 14px"></i>
+          <span style="font-size: 12px">10s</span>
+        </button>
+        <button class="seek-btn" (click)="seekVideo(10)">
+          <i class="fas fa-redo" style="font-size: 14px"></i>
+          <span style="font-size: 12px">10s</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- List Film Section -->
+  <div class="list-film-section">
+    <app-movie-carousel
+      *ngIf="relatedMovies&&relatedMovies.length > 0"
+      title="Phim liên quan"
+      [movies]="relatedMovies"
+    ></app-movie-carousel>
+  </div>
+  <div class="section-history" *ngIf="!loading&&!error&&historyItems.length>0">
+    <h2 class="section-title">Xem tiếp của bạn</h2>
+    <div class="history-grid">
+      <app-history-card
+        *ngFor="let item of historyItems"
+        [historyItem]="item"
+        (deleted)="handleItemDelete($event)"
+      >
+      </app-history-card>
+    </div>
+  </div>
+  <!-- Comment Section -->
+  <div #commentSectionContainer>
+    <app-comment-section [movieId]="movie.id">
+    </app-comment-section>
+  </div>
+</div>
+<app-prompt-message
+  [isVisible]="isVisible"
+  [title]="promptTitle"
+  [message]="promptMessage"
+  confirmButtonText="Xác nhận"
+  (onConfirm)="onConfirmPrompt()"
+></app-prompt-message>
+<app-footer></app-footer>

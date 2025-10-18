@@ -1,0 +1,66 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Chi tiết bình luận #{{ commentToEdit?.id }}</h3>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+    <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+      <div class="modal-body">
+        <div class="info-grid">
+          <div class="info-block">
+            <h6>Thông tin người dùng</h6>
+            <div class="d-flex align-items-center mb-3">
+              <div>
+                <div class="fw-bold">{{ commentToEdit?.username }}</div>
+                <div class="text-muted">{{ commentToEdit?.email }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="info-block">
+            <h6>Thông tin phim</h6>
+            <div class="d-flex align-items-center mb-3">
+              <img [src]="commentToEdit?.posterUrl" [alt]="commentToEdit?.movieTitle"
+                   class="me-3 movie-poster-modal">
+              <div>
+                <div class="fw-bold">{{ commentToEdit?.movieTitle}}</div>
+                <div class="text-muted">{{ commentToEdit?.year| date:'yyyy' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <label for="content">Nội dung bình luận</label>
+          <div *ngIf="!isEditMode" class="comment-display-box">{{ commentToEdit?.content }}</div>
+          <div *ngIf="isEditMode">
+            <textarea id="content" formControlName="content" class="form-control" rows="4"></textarea>
+          </div>
+          <div *ngIf="commentForm.get('content')?.invalid && commentForm.get('content')?.touched" class="error-text">
+            <small *ngIf="commentForm.get('content')?.errors?.['required']">Nội dung không được bỏ trống.</small>
+            <small *ngIf="commentForm.get('content')?.errors?.['minlength']">Nội dung phải có ít nhất 3 ký tự.</small>
+          </div>
+        </div>
+
+        <div class="info-block mt-4">
+          <h6>Thông tin khác</h6>
+          <ul class="list-unstyled">
+            <li><strong>Ngày tạo:</strong> {{ commentToEdit?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="!isEditMode">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="isEditMode = true">Chỉnh sửa</button>
+      </div>
+      <div class="modal-footer" *ngIf="isEditMode">
+        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Hủy</button>
+        <button type="submit" class="btn btn-primary" [disabled]="commentForm.invalid || isUpdating">
+          <i *ngIf="isUpdating" class="fas fa-spinner fa-spin"></i>
+          {{ isUpdating ? 'Đang lưu...' : 'Lưu thay đổi' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

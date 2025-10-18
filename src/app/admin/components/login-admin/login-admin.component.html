@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="header">
+    <h3>Đăng Nhập Trang Admin</h3>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <div class="input-wrapper">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="username" placeholder="Nhập tên đăng nhập ..." formControlName="username"
+               class="form-control">
+      </div>
+      <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-text">
+        <span *ngIf="loginForm.get('username')?.errors?.['required']">Tên đăng nhập là bắt buộc</span>
+        <span *ngIf="loginForm.get('username')?.errors?.['minlength']">Tên đăng nhập phải có ít nhất 3 kí tự</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrapper">
+        <i class="fas fa-lock input-icon"></i>
+        <input [type]="showPassword ? 'text' : 'password'" placeholder="Nhập mật khẩu ..." id="password"
+               formControlName="password" class="form-control">
+        <button
+          type="button"
+          class="password-toggle"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+        >
+          <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </button>
+      </div>
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-text">
+        <span *ngIf="loginForm.get('password')?.errors?.['required']">Bắt buộc phải nhập mật khẩu</span>
+        <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mật khẩu phải có ít nhất 6 kí tự</span>
+      </div>
+    </div>
+    <div class="submit-btn">
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isLoading || loginForm.invalid"
+        [class.loading]="isLoading"
+      >
+        <span *ngIf="!isLoading">Đăng nhập</span>
+        <span *ngIf="isLoading" class="loading-content">
+          <i class="fas fa-spinner fa-spin"></i>
+          Đang đăng nhập...
+        </span>
+      </button>
+    </div>
+    <div *ngIf="error" class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
+    <div *ngIf="successMessage" class="success-message">
+      <i class="fas fa-check-circle"></i>
+      {{ successMessage }}
+    </div>
+  </form>
+</div>

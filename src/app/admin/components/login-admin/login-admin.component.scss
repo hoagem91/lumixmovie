@@ -1,0 +1,178 @@
+// F:/WorkSpace/Front-End/angular-project/lumix-frontend/UiLumix/src/app/admin/components/login-admin/login-admin.component.scss
+
+$netflix-red: #E50914;
+$dark-bg: #141414;
+$dark-card: #1f2937;
+$text-primary: #f9fafb;
+$text-secondary: #9ca3af;
+$border-color: #374151;
+$error-color: #f87171;
+$success-color: #4ade80;
+$netflix-dark-bg: #111827;
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $netflix-dark-bg;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  background-color: $dark-card;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  color: $text-primary;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+// --- Nhóm các trường input ---
+.form-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $text-secondary;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-wrapper {
+    position: relative;
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-secondary;
+      pointer-events: none; // Cho phép click xuyên qua icon
+    }
+  }
+
+  .form-control {
+    width: 100%;
+    background: #333;
+    border: 1px solid #444;
+    color: $text-primary;
+    border-radius: 6px;
+    padding: 0.75rem 3rem 0.75rem 2.75rem; // Thêm padding cho cả 2 icon
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+      color: #888;
+    }
+
+    // Hiệu ứng khi focus vào input
+    &:focus {
+      outline: none;
+      border-color: $netflix-red;
+      box-shadow: 0 0 0 3px rgba($netflix-red, 0.3);
+    }
+  }
+
+  // Nút ẩn/hiện mật khẩu
+  .password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+}
+
+// --- Nút Đăng nhập ---
+.submit-btn {
+  margin-top: 2rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: $netflix-red;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:not(:disabled):hover {
+    background-color: darken($netflix-red, 10%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Trạng thái đang tải
+  &.loading {
+    .loading-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
+// --- Thông báo lỗi ---
+.error-text {
+  color: $error-color;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.error-message {
+  background-color: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.3);
+  color: $error-color;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.success-message{
+  background-color: rgba($success-color, 0.1);
+  border: 1px solid rgba($success-color, 0.3);
+  color: $success-color;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

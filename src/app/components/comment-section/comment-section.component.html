@@ -1,0 +1,153 @@
+<div class="comments-container">
+  <h3>Bình Luận ({{ comments.length }})</h3>
+
+  <!-- Form nhập bình luận chính -->
+  <div class="comment-form-wrapper" *ngIf="authService.isLoggedIn(); else showLoginForm">
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <textarea formControlName="content" placeholder="Viết bình luận..." rows="4"></textarea>
+      <div class="form-actions">
+        <span *ngIf="commentForm.get('content')?.hasError('minLength')" class="error-text">
+          Bình luận phải có ít nhất 3 ký tự.
+        </span>
+        <button type="submit" [disabled]="commentForm.invalid || isSubmitting">
+          <span *ngIf="!isSubmitting">Bình luận</span>
+          <span *ngIf="isSubmitting" class="spinner-small"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <ng-template #showLoginForm>
+    <div class="login-prompt">
+      Vui lòng <a routerLink="/login">đăng nhập</a> để bình luận.
+    </div>
+  </ng-template>
+
+  <!-- Danh sách bình luận -->
+  <div class="comments-list">
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <span>Đang tải bình luận ...</span>
+    </div>
+
+    <div *ngIf="!loading && error" class="error-state">
+      <p>{{ error }}</p>
+      <button (click)="loadComments()">Thử lại</button>
+    </div>
+
+    <div *ngIf="!loading && comments.length === 0 && !error" class="empty-state">
+      <p>Không có bình luận nào. Hãy là người đầu tiên!</p>
+    </div>
+
+    <!-- Bình luận chính -->
+    <div
+      class="comment-item"
+      *ngFor="let comment of comments; trackBy: trackByCommentId"
+      [class.new-comment]="newCommentIds.has(comment.id)"
+    >  <!-- Header -->
+      <div class="comment-author">
+        <i class="fas fa-user-circle author-avatar"></i>
+        <div class="author-info">
+          <span class="author-name">{{ comment.username }}</span>
+          <span class="comment-date">{{ comment.createdAt | date: 'short' }}</span>
+        </div>
+      </div>
+
+      <!-- Nội dung -->
+      <div class="comment-content">
+        <ng-container *ngIf="editingCommentId !== comment.id; else editingBlock">
+          {{ comment.content }}
+        </ng-container>
+
+        <ng-template #editingBlock>
+          <textarea class="edit-textarea" [(ngModel)]="editingContent" rows="3"></textarea>
+          <div class="edit-actions">
+            <button class="cancel-btn" (click)="cancelEdit()">Huỷ</button>
+            <button class="save-btn" (click)="saveUpdate()" [disabled]="isUpdating">
+              <i *ngIf="isUpdating" class="fas fa-spinner fa-spin"></i>
+              {{ isUpdating ? 'Đang lưu...' : 'Lưu' }}
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Hành động -->
+      <div class="comment-actions">
+        <!-- Like -->
+        <button
+          class="action-button like-btn"
+          [class.active]="comment.userReaction === 'LIKE'"
+          (click)="toggleLike(comment.id)"
+          [disabled]="!authService.isLoggedIn()">
+          <i class="fas fa-thumbs-up"></i>
+          <span>{{ comment.likeCount || 0 }}</span>
+        </button>
+
+        <!-- Dislike -->
+        <button
+          class="action-button dislike-btn"
+          [class.active]="comment.userReaction === 'DISLIKE'"
+          (click)="toggleDislike(comment.id)"
+          [disabled]="!authService.isLoggedIn()">
+          <i class="fas fa-thumbs-down"></i>
+          <span>{{ comment.dislikeCount || 0 }}</span>
+        </button>
+
+        <!-- Trả lời -->
+        <button
+          class="action-button reply-btn"
+          (click)="toggleReply(comment.id)"
+          *ngIf="authService.isLoggedIn()">
+          <i class="fas fa-reply"></i>
+          <span>Trả lời</span>
+        </button>
+      </div>
+
+      <!-- Form trả lời -->
+      <div *ngIf="replyingToCommentId === comment.id" class="reply-form">
+        <textarea [(ngModel)]="replyContent" placeholder="Nhập nội dung trả lời..."></textarea>
+        <div class="reply-actions">
+          <button class="close-btn" (click)="cancelReply()">Huỷ</button>
+          <button (click)="sendReply(comment.id)" [disabled]="!replyContent.trim() || isSending">
+            <span *ngIf="!isSending" class="send-btn">
+              Gửi
+            </span>
+            <svg fill="none" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="m22.1012 10.5616-19.34831-9.43824c-.1664-.08117-.34912-.12336-.53427-.12336-.67302 0-1.21862.5456-1.21862 1.21862v.03517c0 .16352.02005.32643.05971.48507l1.85597 7.42384c.05069.2028.22214.3526.42986.3757l8.15756.9064c.2829.0314.4969.2705.4969.5552s-.214.5238-.4969.5552l-8.15756.9064c-.20772.0231-.37917.1729-.42986.3757l-1.85597 7.4238c-.03966.1587-.05971.3216-.05971.4851v.0352c0 .673.5456 1.2186 1.21862 1.2186.18515 0 .36787-.0422.53427-.1234l19.34831-9.4382c.5499-.2682.8988-.8265.8988-1.4384s-.3489-1.1702-.8988-1.4384z"
+                fill="currentColor"></path>
+            </svg>
+            <i *ngIf="isSending" class="fas fa-spinner fa-spin"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nút xem thêm -->
+      <div *ngIf="comment.replies?.length" class="toggle-replies">
+        <button (click)="toggleReplies(comment.id)">
+          {{ expandedComments[comment.id] ? 'Ẩn bớt' : 'Xem thêm ' + comment.replies.length + ' trả lời' }}
+        </button>
+      </div>
+
+      <!-- Replies (ẩn/hiện bằng toggle) -->
+      <div class="replies" *ngIf="expandedComments[comment.id]">
+        <app-comment-thread
+          *ngFor="let reply of comment.replies"
+          [comment]="reply"
+          [movieId]="movieId"
+          [rootUsername]="reply.username"
+          (onReplySubmitted)="handleNewReply($event, comment.id)">
+        </app-comment-thread>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup xác nhận xóa -->
+<app-prompt-message
+  [isVisible]="isVisiable"
+  [title]="promptTitle"
+  [message]="promptMessage"
+  confirmButtonText="Xóa"
+  (onConfirm)="deleteComment()">
+</app-prompt-message>

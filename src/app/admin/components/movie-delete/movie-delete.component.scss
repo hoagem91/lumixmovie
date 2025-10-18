@@ -1,0 +1,168 @@
+// Bảng màu Netflix
+$netflix-red: #E50914;
+$netflix-dark-bg: #111827;
+$netflix-card-bg: #1f2937;
+$netflix-border: #374151;
+$netflix-text: rgba(255, 255, 255, 0.9);
+$netflix-text-muted: #9ca3af;
+
+.container {
+  padding: 2rem;
+  color: $netflix-text;
+  background-color: $netflix-dark-bg;
+  min-height: 100%;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: $netflix-text;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: $netflix-text-muted;
+  font-size: 1rem;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 2rem;
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    color: $netflix-text-muted;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid $netflix-border;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: $netflix-card-bg;
+    color: $netflix-text;
+
+    &::placeholder {
+      color: #6b7280;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $netflix-red;
+      box-shadow: 0 0 0 3px rgba($netflix-red, 0.2);
+    }
+  }
+}
+
+.results-container {
+  .loading-spinner-container {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  .loading-spinner {
+    border: 2px solid $netflix-border;
+    border-top: 2px solid $netflix-red;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .search-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .movie-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: $netflix-card-bg;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid $netflix-border;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: lighten($netflix-card-bg, 5%);
+    }
+  }
+
+  .movie-poster {
+    width: 50px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .movie-info {
+    flex-grow: 1;
+  }
+
+  .movie-title {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .movie-year {
+    font-size: 0.875rem;
+    color: $netflix-text-muted;
+    margin: 0.25rem 0 0;
+  }
+
+  .delete-button {
+    background-color: rgba($netflix-red, 0.8);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $netflix-red;
+    }
+
+    .fas {
+      font-size: 0.875rem;
+    }
+  }
+
+  .no-results, .initial-prompt {
+    text-align: center;
+    padding: 3rem;
+    color: $netflix-text-muted;
+
+    .fas {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
+}

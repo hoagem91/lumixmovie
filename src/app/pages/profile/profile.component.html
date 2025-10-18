@@ -1,0 +1,200 @@
+<!-- src/app/pages/profile/profile.component.html -->
+<app-header></app-header>
+
+<div class="profile-page-container">
+  <!-- Trạng thái Đang tải -->
+  <div *ngIf="isLoading" class="state-container">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <p>Đang tải thông tin...</p>
+    </div>
+  </div>
+
+  <!-- Trạng thái Lỗi -->
+  <div *ngIf="!isLoading && error" class="state-container">
+    <div class="error-message">
+      <div class="error-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2>Đã xảy ra lỗi</h2>
+      <p>{{ error }}</p>
+      <button (click)="loadUserData()" class="retry-button">
+        <i class="fas fa-redo"></i>
+        Thử lại
+      </button>
+    </div>
+  </div>
+
+  <!-- Nội dung chính khi có dữ liệu -->
+  <div *ngIf="!isLoading && user" class="profile-content">
+    <!-- Background Effects -->
+    <div class="bg-effects">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="avatar-section">
+          <div class="avatar-container">
+            <div class="avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="avatar-status"></div>
+          </div>
+        </div>
+
+        <div class="header-info">
+          <h1 class="profile-title">Tài khoản của tôi</h1>
+          <p class="profile-subtitle">Quản lý thông tin cá nhân của bạn</p>
+          <div class="profile-badges">
+            <span class="badge verified">
+              <i class="fas fa-check-circle"></i>
+              Đã xác thực
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Form -->
+      <form [formGroup]="profileForm" (ngSubmit)="saveChanges()" class="profile-form">
+
+        <!-- Tên người dùng -->
+        <div class="form-group">
+          <div class="input-container">
+            <label for="username" class="floating-label">Tên người dùng</label>
+            <div *ngIf="!isEditing" class="display-field">
+              <span class="field-value">{{ user.username }}</span>
+              <div class="field-decoration"></div>
+            </div>
+            <div *ngIf="isEditing" class="input-wrapper">
+              <input
+                id="username"
+                type="text"
+                class="modern-input"
+                formControlName="username"
+                placeholder=" ">
+              <div class="input-highlight"></div>
+              <div class="input-bar"></div>
+            </div>
+          </div>
+          <div *ngIf="isEditing && profileForm.get('username')?.invalid && profileForm.get('username')?.touched" class="field-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span *ngIf="profileForm.get('username')?.errors?.['required']">Tên người dùng là bắt buộc</span>
+            <span *ngIf="profileForm.get('username')?.errors?.['minlength']">Tên phải có ít nhất 3 ký tự</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <div class="input-container">
+            <label for="email" class="floating-label">Địa chỉ email</label>
+            <div *ngIf="!isEditing" class="display-field">
+              <span class="field-value">{{ user.email }}</span>
+              <div class="field-decoration"></div>
+            </div>
+            <div *ngIf="isEditing" class="input-wrapper">
+              <input
+                id="email"
+                type="email"
+                class="modern-input"
+                formControlName="email"
+                placeholder=" ">
+              <div class="input-highlight"></div>
+              <div class="input-bar"></div>
+            </div>
+          </div>
+          <div *ngIf="isEditing && profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="field-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span *ngIf="profileForm.get('email')?.errors?.['required']">Email là bắt buộc</span>
+            <span *ngIf="profileForm.get('email')?.errors?.['email']">Email không hợp lệ</span>
+          </div>
+        </div>
+
+        <!-- Mã người dùng (chỉ xem) -->
+        <div class="form-group">
+          <div class="input-container">
+            <label class="floating-label">Mã người dùng</label>
+            <div class="display-field readonly">
+              <span class="field-value">{{ user.userId }}</span>
+              <div class="field-decoration readonly-decoration"></div>
+              <i class="fas fa-lock readonly-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ngày tham gia (chỉ xem) -->
+        <div class="form-group">
+          <div class="input-container">
+            <label class="floating-label">Ngày tham gia</label>
+            <div class="display-field readonly">
+              <span class="field-value">{{ user.createdAt }}</span>
+              <div class="field-decoration readonly-decoration"></div>
+              <i class="fas fa-calendar-alt readonly-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Các nút hành động -->
+        <div class="form-actions">
+          <!-- Nút Sửa -->
+          <button *ngIf="!isEditing" type="button" class="action-btn edit-btn" (click)="toggleEditMode()">
+            <div class="btn-content">
+              <i class="fas fa-edit"></i>
+              <span>Sửa thông tin</span>
+            </div>
+            <div class="btn-ripple"></div>
+          </button>
+
+          <!-- Nút Lưu và Hủy khi đang sửa -->
+          <div *ngIf="isEditing" class="edit-actions">
+            <button type="button" class="action-btn cancel-btn" (click)="cancelEdit()">
+              <div class="btn-content">
+                <i class="fas fa-times"></i>
+                <span>Hủy bỏ</span>
+              </div>
+              <div class="btn-ripple"></div>
+            </button>
+
+            <button type="submit" class="action-btn save-btn" [disabled]="profileForm.invalid || isSaving">
+              <div class="btn-content">
+                <i *ngIf="!isSaving" class="fas fa-save"></i>
+                <i *ngIf="isSaving" class="fas fa-spinner fa-spin"></i>
+                <span>{{ isSaving ? 'Đang lưu...' : 'Lưu thay đổi' }}</span>
+              </div>
+              <div class="btn-ripple"></div>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Additional Info Cards -->
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="card-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="card-content">
+          <h3>Bảo mật</h3>
+          <p>Tài khoản được bảo vệ với mã hóa 256-bit</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon">
+          <i class="fas fa-history"></i>
+        </div>
+        <div class="card-content">
+          <h3>Hoạt động gần đây</h3>
+          <p>Đăng nhập lần cuối: Hôm nay</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

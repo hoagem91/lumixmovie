@@ -1,0 +1,35 @@
+<div class="container">
+  <h1 class="title">Bạn đang quan tâm gì?</h1>
+  <div class="cards-wrapper">
+    <div class="carousel-track"
+         (mouseenter)="onCarouselMouseEnter()"
+         (mouseleave)="onCarouselMouseLeave()"
+         (touchstart)="onTouchStart($event)"
+         (touchend)="onTouchEnd($event)"
+    >
+      <div *ngFor="let category of processedCategories"
+           class="card"
+           [style.background-color]="category.bgColor"
+           (click)="onCategoryClick(category.name)"
+      >
+        <h2 class="card-title">{{ category.name }}</h2>
+        <a class="card-link">
+          Xem chủ đề
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Dots Indicators - Hiển thị theo số slides thực tế -->
+    <div class="carousel-dots" *ngIf="getTotalSlides() > 1">
+        <span class="dot"
+              *ngFor="let slide of getSlidesArray(); let i = index"
+              [class.active]="i === currentSlideIndex"
+              (click)="goToSlide(i)">
+        </span>
+    </div>
+  </div>
+</div>

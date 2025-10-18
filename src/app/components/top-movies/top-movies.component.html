@@ -1,0 +1,38 @@
+<div class="top-movies-container">
+  <h2 class="section-title">{{ title }}</h2>
+
+  <div class="carousel-wrapper">
+    <div class="movies-carousel">
+      <div class="movie-item"
+           *ngFor="let movie of movies; let i = index"
+           (click)="onMovieClick(movie)"
+           [style.animation-delay]="i * 0.1 + 's'">
+
+        <div class="rank-number">{{ i+1 }}</div>
+
+        <div class="movie-poster">
+          <img [src]="movie.posterUrl" [alt]="movie.title" />
+          <div class="movie-overlay">
+            <div class="play-icon">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="20" fill="rgba(255,255,255,0.95)"/>
+                <path d="M16 12L28 20L16 28V12Z" fill="#1a1a2e"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="movie-details">
+          <h3 class="movie-title">{{ movie.title }}</h3>
+          <div class="movie-meta">
+            <span>{{ movie.year }}</span>
+            <span class="dot">•</span>
+            <span>{{ movie.rating }}</span>
+            <span class="dot">•</span>
+            <span>{{ movie.duration }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

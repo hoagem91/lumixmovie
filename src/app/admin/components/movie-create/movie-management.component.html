@@ -1,0 +1,149 @@
+<div class="container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Thêm Phim Mới</h1>
+    <p class="page-subtitle">Tải lên video, poster và điền thông tin chi tiết cho phim.</p>
+  </div>
+
+  <!-- Video Upload Section -->
+  <div class="upload-section">
+    <h2 class="section-title">Upload Video</h2>
+
+    <div class="upload-area" id="videoUploadArea">
+      <div class="upload-icon">
+        <i class="fas fa-video"></i>
+      </div>
+      <h3 class="upload-title">Chọn video để tải lên</h3>
+      <p class="upload-subtitle" *ngIf="!selectedVideoFile">Hoặc kéo và thả vào đây</p>
+      <p class="upload-subtitle" *ngIf="selectedVideoFile">{{ selectedVideoFile.name }}</p>
+
+      <button type="button" class="select-button" (click)="videoInput.click()">
+        Select video
+      </button>
+      <input #videoInput type="file" class="file-input" accept="video/*" (change)="onVideoSelected($event)">
+
+      <!-- Nút Upload Video -->
+      <div class="action-buttons" *ngIf="selectedVideoFile && !movieForm.get('videoUrl')?.value">
+        <button type="button" class="btn btn-primary" (click)="uploadVideo()" [disabled]="isUploadingVideo">
+          <i class="fas fa-cloud-upload-alt"></i> {{ isUploadingVideo ? 'Đang tải...' : 'Upload Video' }}
+        </button>
+      </div>
+
+      <!-- Thanh tiến trình -->
+      <div class="upload-progress" *ngIf="isUploadingVideo">
+        <div class="upload-progress-bar" [style.width.%]="videoUploadProgress"></div>
+      </div>
+
+      <!-- Hiển thị URL sau khi upload -->
+      <div class="file-info" *ngIf="movieForm.get('videoUrl')?.value">
+        <p><strong>URL Video:</strong> {{ movieForm.get('videoUrl')?.value }}</p>
+      </div>
+    </div>
+
+    <!-- Video Upload Info -->
+    <div class="info-grid">
+      <div class="info-card">
+        <h3><i class="fas fa-weight-hanging"></i> Kích thước & Thời lượng</h3>
+        <p>Kích thước tối đa: 50 GB, thời lượng video: 60 phút.</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-file-video"></i> Định dạng tệp</h3>
+        <p>Khuyến nghị: ".mp4". Các định dạng phổ biến khác đều được hỗ trợ.</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-desktop"></i> Độ phân giải</h3>
+        <p>Khuyến nghị độ phân giải cao: 1080p, 1440p, 4K.</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-expand-arrows-alt"></i> Tỷ lệ khung hình</h3>
+        <p>Khuyến nghị: 16:9 cho video ngang, 9:16 cho video dọc.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie Information Form -->
+  <div class="form-section">
+    <h2 class="section-title">Thông tin Phim</h2>
+
+    <form [formGroup]="movieForm">
+      <div class="form-grid">
+        <!-- Left Column -->
+        <div>
+          <div class="form-group">
+            <label class="form-label">Tên Phim *</label>
+            <input type="text" class="form-input" placeholder="Nhập tên phim" formControlName="title">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thể loại</label>
+            <input type="text" class="form-input" placeholder="Hành động, Phiêu lưu, v.v." formControlName="genre">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thời lượng (phút)</label>
+            <input type="number" class="form-input" placeholder="120" formControlName="duration">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Năm phát hành</label>
+            <input type="number" class="form-input" placeholder="2024" formControlName="releaseDate">
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div>
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-input form-textarea" placeholder="Nhập mô tả phim..."
+                      formControlName="description"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Poster Phim</label>
+            <div class="poster-upload" (click)="posterInput.click()">
+              <div *ngIf="!posterPreview">
+                <i class="fas fa-image poster-placeholder-icon"></i>
+                <p class="poster-placeholder-text">Click để chọn poster</p>
+                <p class="poster-placeholder-subtext">JPG, PNG, GIF (tối đa 10MB)</p>
+              </div>
+              <img *ngIf="posterPreview" [src]="posterPreview" alt="Poster Preview" class="poster-preview">
+            </div>
+            <input #posterInput type="file" class="file-input" accept="image/*" (change)="onPosterSelected($event)">
+
+            <div class="action-buttons" *ngIf="selectedPosterFile && !movieForm.get('posterUrl')?.value">
+              <button type="button" class="btn btn-primary" (click)="uploadPoster()" [disabled]="isUploadingPoster">
+                <i class="fas fa-cloud-upload-alt"></i> {{ isUploadingPoster ? 'Đang tải...' : 'Upload Poster' }}
+              </button>
+            </div>
+            <div class="upload-progress" *ngIf="isUploadingPoster">
+              <div class="upload-progress-bar" [style.width.%]="posterUploadProgress"></div>
+            </div>
+
+            <!-- Hiển thị URL sau khi upload -->
+            <div class="file-info" *ngIf="movieForm.get('posterUrl')?.value">
+              <p><strong>URL Image:</strong> {{ movieForm.get('posterUrl')?.value }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">
+          <i class="fas fa-undo"></i> Reset
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting" (click)="askForCreateConfirmation()">
+          <i class="fas fa-upload"></i> {{ isSubmitting ? 'Đang xử lý...' : 'Tạo Phim' }}
+        </button>
+      </div>
+      <!--  Prompt Message  -->
+      <app-prompt-message
+      [isVisible]="isVisible"
+      [title]="promptTitle"
+      [message]="promptMessage"
+      confirmButtonText="Có"
+      (onConfirm)="onSubmit()"
+      ></app-prompt-message>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,455 @@
+:host {
+  display: block;
+  height: 100vh;
+  background-color: #141414;
+}
+
+/* ======== CONTAINER ======== */
+.admin-container {
+  display: flex;
+  height: 100%;
+  position: relative;
+}
+
+/* ======== MENU TOGGLE ======== */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid #282828;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 2100;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: #e50914;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  // Ẩn hamburger khi sidebar mở
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+}
+
+/* ======== OVERLAY ======== */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+/* ======== SIDEBAR ======== */
+.sidebar {
+  width: 250px;
+  background-color: #111827;
+  color: #b3b3b3;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid #282828;
+  transition: width 0.3s ease;
+  z-index: 1000;
+  position: relative;
+
+  /* Close button bên trong sidebar */
+  &-close {
+    display: none;
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: #b3b3b3;
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 2001;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(229, 9, 20, 0.1);
+      color: #e50914;
+      transform: rotate(90deg);
+    }
+
+    &:active {
+      transform: rotate(90deg) scale(0.9);
+    }
+  }
+
+  /* HEADER */
+  &-header {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid #282828;
+    position: relative;
+
+    .logo {
+      color: #e50914;
+      font-weight: bold;
+      margin: 0;
+      font-size: 1.8rem;
+      transition: font-size 0.3s ease;
+    }
+  }
+
+  /* NAVIGATION */
+  &-nav {
+    flex-grow: 1;
+    padding-top: 1rem;
+    overflow-y: auto;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      position: relative;
+
+      a {
+        display: flex;
+        align-items: center;
+        padding: 0.9rem 1.5rem;
+        text-decoration: none;
+        color: #b3b3b3;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        border-left: 4px solid transparent;
+        position: relative;
+
+        i {
+          width: 30px;
+          font-size: 1.2rem;
+          margin-right: 1rem;
+          text-align: center;
+          flex-shrink: 0;
+        }
+
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        &:hover {
+          background-color: #282828;
+          color: #fff;
+        }
+
+        &.active {
+          background-color: rgba(229, 9, 20, 0.1);
+          color: #fff;
+          border-left-color: #e50914;
+          font-weight: 500;
+        }
+
+        .submenu-indicator {
+          position: absolute;
+          right: 1.5rem;
+          top: 50%;
+          transform: translateY(-50%) rotate(0deg);
+          transition: transform 0.3s ease;
+          font-size: 0.8rem;
+        }
+      }
+
+      /* Submenu */
+      .submenu {
+        background-color: #1f2937;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+
+        li a {
+          padding: 0.7rem 1.5rem 0.7rem 3.5rem;
+          display: flex;
+          align-items: center;
+          font-size: 0.9rem;
+          text-decoration: none;
+          color: #b3b3b3;
+          border-left: 4px solid transparent;
+
+          &:hover {
+            color: #fff;
+            background-color: #282828;
+          }
+
+          &.active {
+            color: #e50914;
+            background-color: rgba(229, 9, 20, 0.05);
+          }
+
+          .submenu-icon {
+            width: 20px;
+            font-size: 1rem;
+            margin-right: 0.6rem;
+          }
+        }
+      }
+
+      &.open {
+        > a {
+          background-color: #1f2937;
+
+          .submenu-indicator {
+            transform: translateY(-50%) rotate(180deg);
+          }
+        }
+
+        .submenu {
+          max-height: 300px;
+        }
+      }
+    }
+  }
+
+  /* FOOTER */
+  &-footer {
+    padding: 1rem;
+    border-top: 1px solid #282828;
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      color: #b3b3b3;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 4px;
+
+      i {
+        width: 30px;
+        font-size: 1.2rem;
+        margin-right: 1rem;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        background-color: #e50914;
+        color: #fff;
+        transform: translateX(3px);
+      }
+    }
+  }
+}
+
+/* ======== MAIN CONTENT ======== */
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #111827;
+  padding: 1.5rem;
+  color: #fff;
+  transition: margin-left 0.3s ease;
+}
+
+/* ======== RESPONSIVE ======== */
+
+/* 🔸 Tablet (769px - 1024px): Sidebar thu nhỏ, chỉ hiện icon */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .sidebar {
+    width: 80px;
+
+    &-header .logo {
+      font-size: 1.2rem;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    &-nav {
+      a {
+        justify-content: center;
+        padding: 0.9rem 0.5rem;
+
+        span,
+        .submenu-indicator {
+          display: none;
+        }
+
+        i {
+          margin-right: 0;
+        }
+      }
+
+      li.has-submenu {
+        position: relative;
+      }
+
+      .submenu {
+        position: absolute;
+        left: 80px;
+        top: 0;
+        background-color: #1f2937;
+        width: 220px;
+        border-left: 2px solid #e50914;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+        max-height: none !important;
+        display: none;
+        z-index: 1001;
+
+        li a {
+          padding: 0.7rem 1rem !important;
+        }
+      }
+
+      li.open .submenu {
+        display: block;
+      }
+    }
+
+    &-footer {
+      a {
+        justify-content: center;
+        padding: 0.9rem 0.5rem;
+
+        span {
+          display: none;
+        }
+
+        i {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+/* 🔸 Mobile (≤768px): Sidebar ẩn hoàn toàn, slide từ trái */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .overlay {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.open {
+      transform: translateX(0);
+
+      // Hiện close button
+      .sidebar-close {
+        display: flex;
+        top: 20px;
+        right: 0;
+      }
+    }
+
+    // Reset sidebar về dạng đầy đủ trên mobile
+    &-header .logo {
+      font-size: 1.8rem;
+      writing-mode: initial;
+      text-orientation: initial;
+    }
+
+    &-nav {
+      a {
+        justify-content: flex-start;
+        padding: 0.9rem 1.5rem;
+
+        span,
+        .submenu-indicator {
+          display: block;
+        }
+
+        i {
+          margin-right: 1rem;
+        }
+      }
+
+      .submenu {
+        position: static;
+        width: 100%;
+        border-left: none;
+        box-shadow: none;
+      }
+
+      li.open .submenu {
+        display: block;
+      }
+    }
+
+    &-footer a {
+      justify-content: flex-start;
+      padding: 0.9rem 1.5rem;
+
+      span {
+        display: block;
+      }
+
+      i {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .main-content {
+    padding-top: 4rem;
+  }
+}
+
+/* 🔸 Mobile nhỏ (≤480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 260px;
+  }
+
+  .main-content {
+    padding: 4rem 1rem 1rem;
+  }
+
+  .menu-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+}

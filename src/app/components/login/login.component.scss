@@ -1,0 +1,623 @@
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+
+@mixin button-hover($bg-color, $text-color: white) {
+  &:hover:not(:disabled) {
+    background-color: darken($bg-color, 8%);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.login-wrapper {
+  min-height: 100vh;
+  @include flex-center;
+  background-color: #0f0f0f;
+  padding: 20px;
+  position: relative;
+}
+
+.login-container {
+  background: #1a1a1a;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  padding: 48px;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+
+  @media (max-width: 640px) {
+    padding: 32px 24px;
+    margin: 0 16px;
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff; // White
+    margin: 0 0 8px 0;
+    letter-spacing: -0.025em;
+  }
+
+  .subtitle {
+    color: #b3b3b3; // Light grey
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 24px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff; // White
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .input-wrapper {
+    position: relative;
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 2px solid #404040;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: #ffffff;
+      background-color: #333333;
+      @include transition(border-color);
+
+      &::placeholder {
+        color: #b3b3b3;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #e50914;
+        box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+      }
+
+      &:invalid {
+        border-color: #ef4444;
+      }
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #b3b3b3;
+      font-size: 0.875rem;
+      pointer-events: none;
+      @include transition(color);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #b3b3b3;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      @include transition(color);
+
+      &:hover {
+        color: #b3b3b3;
+      }
+
+      &:focus {
+        outline: 2px solid #e50914;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .field-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #ffffff;
+
+      input[type="checkbox"] {
+        display: none;
+      }
+
+      .checkmark {
+        position: relative;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-color: #333333;
+        border: 2px solid #404040;
+        border-radius: 3px;
+        margin-right: 8px;
+        @include transition(all);
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 3px;
+          top: 0px;
+          width: 4px;
+          height: 8px;
+          border: solid white;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+          opacity: 0;
+          @include transition(opacity);
+        }
+      }
+
+      input[type="checkbox"]:checked + .checkmark {
+        background-color: #e50914;
+        border-color: #e50914;
+
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+
+    .forgot-password {
+      color: #e50914;
+      text-decoration: none;
+      font-size: 0.875rem;
+      @include transition(color);
+
+      &:hover {
+        color: #b8070f;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .login-button {
+    width: 100%;
+    padding: 12px 24px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(all);
+    @include button-hover(#e50914);
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    &.loading {
+      pointer-events: none;
+    }
+
+    .loading-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      i {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  .error-message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      flex-shrink: 0;
+    }
+  }
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 25px 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #404040;
+    transform: translateY(-50%);
+  }
+
+  span {
+    background-color: #1a1a1a;
+    padding: 0 16px;
+    color: #b3b3b3;
+    font-size: 0.875rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    border: 2px solid #404040;
+    border-radius: 8px;
+    background-color: #333333;
+    color: #ffffff; // White
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      border-color: #e50914;
+      background-color: #404040;
+      transform: translateY(-1px);
+    }
+
+    &.google {
+      i {
+        color: #4285f4;
+      }
+    }
+
+    &.facebook {
+      i {
+        color: #1877f2;
+      }
+    }
+  }
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+
+  p {
+    color: #ffffff;
+    font-size: 0.875rem;
+    margin: 0;
+
+    a {
+      color: #e50914;
+      text-decoration: none;
+      font-weight: 500;
+      @include transition(color);
+
+      &:hover {
+        color: #b8070f;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 24px 20px;
+  }
+
+  .login-header {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .social-login {
+    .social-button {
+      font-size: 0.8rem;
+      padding: 10px 16px;
+    }
+  }
+}
+/* Google Login Button Styles */
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 20px;
+  background: #ffffff;
+  color: #333333;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover Effects */
+.google-login-button:hover {
+  background: #f8f9fa;
+  border-color: #d0d7de;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  color: #333333;
+  text-decoration: none;
+}
+
+/* Focus Effects */
+.google-login-button:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.2);
+}
+
+/* Active State */
+.google-login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Google Icon Styling */
+.google-login-button .fab.fa-google {
+  font-size: 20px;
+  background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: transform 0.3s ease;
+}
+
+.google-login-button:hover .fab.fa-google {
+  transform: scale(1.1);
+}
+
+/* Ripple Effect */
+.google-login-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(66, 133, 244, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: 0;
+}
+
+.google-login-button:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Text Animation */
+.google-login-button span {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.google-login-button:hover span {
+  transform: translateX(2px);
+}
+
+/* Alternative Modern Style (Glassmorphism) */
+.google-login-button.glass-style {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-button.glass-style:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Mode Google Button */
+.google-login-button.dark-mode {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 2px solid #333333;
+}
+
+.google-login-button.dark-mode:hover {
+  background: #2a2a2a;
+  border-color: #444444;
+}
+
+/* Outlined Style */
+.google-login-button.outlined {
+  background: transparent;
+  color: #4285f4;
+  border: 2px solid #4285f4;
+}
+
+.google-login-button.outlined:hover {
+  background: rgba(66, 133, 244, 0.05);
+  color: #3367d6;
+  border-color: #3367d6;
+}
+
+/* Gradient Style */
+.google-login-button.gradient {
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 25%, #fbbc05 75%, #ea4335 100%);
+  color: white;
+  border: none;
+  font-weight: 700;
+}
+
+.google-login-button.gradient .fab.fa-google {
+  color: white;
+  background: none;
+  -webkit-text-fill-color: white;
+}
+
+.google-login-button.gradient:hover {
+  background: linear-gradient(135deg, #3367d6 0%, #2d8f47 25%, #f9ab00 75%, #d33b2c 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(66, 133, 244, 0.3);
+}
+
+/* Loading State for Google Button */
+.google-login-button.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.google-login-button.loading .fab.fa-google {
+  animation: googleSpin 1s linear infinite;
+}
+
+@keyframes googleSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .google-login-button {
+    padding: 16px 20px;
+    font-size: 15px;
+    gap: 10px;
+  }
+
+  .google-login-button .fab.fa-google {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .google-login-button {
+    padding: 14px 16px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .google-login-button .fab.fa-google {
+    font-size: 16px;
+  }
+}
+
+
+/* Dark mode divider */
+.dark-mode .divider span {
+  background: #1a1a1a;
+  color: #999999;
+}
+
+.dark-mode .divider::before {
+  background: linear-gradient(90deg, transparent, #333333, transparent);
+}
+
+/* Button Animation Variants */
+.google-login-button.bounce:hover {
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 20%, 60%, 100% { transform: translateY(-2px); }
+  40% { transform: translateY(-6px); }
+  80% { transform: translateY(-4px); }
+}
+
+.google-login-button.pulse:hover {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(66, 133, 244, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0); }
+}

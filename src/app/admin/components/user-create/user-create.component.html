@@ -1,0 +1,103 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Tạo tài khoản người dùng mới</h3>
+    </div>
+    <form class="form-wrapper" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-control">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Nhập tên đăng nhập ..." formControlName="username">
+        <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="error-text">
+          <span *ngIf="userForm.get('username')?.errors?.['required']">Tên đăng nhập là bắt buộc</span>
+          <span *ngIf="userForm.get('username')?.errors?.['minlength']">Tên đăng nhập phải có ít nhất 3 kí tự</span>
+        </div>
+      </div>
+      <div class="form-control">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Nhập email ..." formControlName="email">
+        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error-text">
+          <span *ngIf="userForm.get('email')?.errors?.['required']">Email là bắt buộc</span>
+          <span *ngIf="userForm.get('email')?.errors?.['email']">Email không hợp lệ</span>
+        </div>
+      </div>
+      <div class="form-control">
+        <label for="password">Mật khẩu</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder="Nhập mật khẩu ..."
+                 formControlName="password">
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+          >
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="error-text">
+          <span *ngIf="userForm.get('password')?.errors?.['required']">Bắt buộc phải nhập mật khẩu</span>
+          <span *ngIf="userForm.get('password')?.errors?.['minlength']">Mật khẩu phải có ít nhất 6 kí tự</span>
+        </div>
+      </div>
+      <div class="form-control">
+        <label for="confirmPassword">Xác nhận mật khẩu</label>
+        <div class="input-wrapper">
+          <i class="fas fa-check-circle input-icon"></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Xác nhận mật khẩu"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+          >
+        </div>
+        <div *ngIf="userForm.get('confirmPassword')?.invalid && userForm.get('confirmPassword')?.touched"
+             class="error-text">
+        <span
+          *ngIf="userForm.get('confirmPassword')?.errors?.['required']">Bắt buộc phải nhập mật khẩu để xác thực</span>
+        </div>
+        <div *ngIf="userForm.errors?.['passwordMismatch']&&userForm.get('confirmPassword')?.touched" class="error-text">
+          <span>Mật khẩu xác thực không khớp</span>
+        </div>
+      </div>
+      <div class="form-control">
+        <label>Vai trò</label>
+        <div class="roles-container" formArrayName="roles">
+          <div *ngFor="let role of rolesFormArray.controls;let i = index" class="checkbox-group">
+            <input type="checkbox" [formControlName]="i" [id]="'role-'+i">
+            <label [for]="'role-'+i" class="checkbox-label">{{ allAvailableRoles[i]|titlecase }}</label>
+          </div>
+          <div *ngIf="rolesFormArray.invalid && (rolesFormArray.dirty||rolesFormArray.touched)" class="error-text">
+            <span *ngIf="rolesFormArray.errors?.['requiredOneCheckbox']">Vui lòng chọn vai trò</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-control">
+        <label>Trạng thái</label>
+        <div class="toggle-switch-container">
+          <label class="toggle-switch">
+            <input type="checkbox" formControlName="enabled">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label">
+            {{ userForm.get('enabled')?.value ? 'Đã kích hoạt' : 'Chưa kích hoạt' }}
+          </span>
+        </div>
+      </div>
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Hủy</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading || userForm.invalid"
+        >
+          <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+          <span>{{ isLoading ? 'Đang tạo ...' : 'Tạo tài khoản' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

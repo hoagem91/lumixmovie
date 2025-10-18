@@ -1,0 +1,71 @@
+<div class="comment-container">
+  <!-- Header -->
+  <div class="comment-header">
+    <strong>{{ comment.username }}</strong>
+    <small>{{ comment.createdAt | date:'short' }}</small>
+  </div>
+
+  <!-- Nội dung bình luận -->
+  <div class="comment-body">
+    <ng-container *ngIf="comment.parentName">
+      <strong>@{{ comment.parentName }}</strong>
+    </ng-container>
+    {{ comment.content }}
+  </div>
+
+  <!-- Các hành động (Trả lời / Like / Sửa / Xóa) -->
+  <div class="comment-actions">
+    <button
+      class="action-button like-btn"
+      [class.active]="comment.userReaction === 'LIKE'"
+      (click)="toggleLike(comment.id)"
+      [disabled]="!authService.isLoggedIn()">
+      <i class="fas fa-thumbs-up"></i>
+      <span>{{ comment.likeCount || 0 }}</span>
+    </button>
+
+    <!-- Dislike -->
+    <button
+      class="action-button dislike-btn"
+      [class.active]="comment.userReaction === 'DISLIKE'"
+      (click)="toggleDislike(comment.id)"
+      [disabled]="!authService.isLoggedIn()">
+      <i class="fas fa-thumbs-down"></i>
+      <span>{{ comment.dislikeCount || 0 }}</span>
+    </button>
+    <button
+      class="action-button reply-btn"
+      (click)="toggleReplyForm()"
+      *ngIf="authService.isLoggedIn()">
+      <i class="fas fa-reply"></i>
+      <span>Trả lời</span>
+    </button>
+  </div>
+
+  <!-- Form trả lời -->
+  <div *ngIf="replying" class="reply-form">
+    <textarea
+      [(ngModel)]="replyContent"
+      placeholder="Viết bình luận"
+      rows="3"
+    ></textarea>
+    <div class="reply-actions">
+      <button (click)="cancelReply()">Hủy</button>
+      <button (click)="sendReply()" [disabled]="isSending || !replyContent.trim()">
+        <span *ngIf="!isSending">Gửi</span>
+        <i *ngIf="isSending" class="fas fa-spinner fa-spin"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hiển thị replies đệ quy -->
+  <div class="replies" *ngIf="comment.replies?.length">
+    <app-comment-thread
+      *ngFor="let reply of comment.replies"
+      [comment]="reply"
+      [movieId]="movieId"
+      [rootUsername]="reply.username"
+      (onReplySubmitted)="handleNewReply($event)"
+    ></app-comment-thread>
+  </div>
+</div>

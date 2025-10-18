@@ -1,0 +1,22 @@
+<div class="prompt-overlay" *ngIf="isVisible" (click)="cancel()">
+  <div class="prompt-dialog" (click)="$event.stopPropagation()">
+    <div class="prompt-header">
+      <h3 class="prompt-title">{{ title }}</h3>
+      <button class="close-button" (click)="cancel()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="prompt-body">
+      <p>{{ message }}</p>
+    </div>
+    <div class="prompt-footer">
+      <button class="btn btn-secondary" (click)="cancel()">
+        {{ cancelButtonText }}
+      </button>
+      <button class="btn btn-danger" (click)="confirm()">
+        {{ confirmButtonText }}
+      </button>
+    </div>
+  </div>
+
+</div>

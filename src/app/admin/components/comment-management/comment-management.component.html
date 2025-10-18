@@ -1,0 +1,247 @@
+<div class="comment-wrapper">
+  <div class="admin-header">
+    <h1><i class="fas fa-comments me-2"></i>Quản lý Bình luận</h1>
+    <p class="mb-0">Dashboard quản lý bình luận của người dùng</p>
+  </div>
+  <div class="container">
+    <!-- Filter Section -->
+    <div class="filter-section" [formGroup]="filterForm">
+      <div class="filter-item search-item">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="form-control" formControlName="searchText"
+                 placeholder="Tìm theo người dùng, phim, nội dung...">
+        </div>
+      </div>
+      <div class="filter-item">
+        <label class="form-label">Từ ngày</label>
+        <input type="date" class="form-control" formControlName="dateFrom">
+      </div>
+      <div class="filter-item">
+        <label class="form-label">Đến ngày</label>
+        <input type="date" class="form-control" formControlName="dateTo">
+      </div>
+      <div class="filter-item actions-item">
+        <button class="btn btn-secondary" (click)="resetFilters()">
+          <i class="fas fa-sync"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container" *ngIf="isSearching">
+      <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner-container">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Đang tìm kiếm...</span>
+        </div>
+      </div>
+      <div *ngIf="!isLoading && filteredComments.length === 0" class="no-data-cell">
+        <i class="fas fa-search"></i>
+        <p>Không tìm thấy kết quả nào.</p>
+      </div>
+      <div class="search-result-list" *ngIf="!isLoading && filteredComments.length > 0">
+        <div class="message-search">
+          <h3>Kết quả tìm kiếm bình luận cho "{{ filterForm.get('searchText')?.value }}"</h3>
+        </div>
+        <div class="table-responsive">
+          <!-- Bulk Actions -->
+          <div class="bulk-actions-container" *ngIf="getSelectedComments().length > 0">
+            <span class="selection-count-text">
+              <strong>Đã chọn {{ getSelectedComments().length }}</strong> bình luận
+            </span>
+            <button class="bulk-delete-btn" (click)="askForBulkDeleteConfirm()">
+              <i class="fas fa-trash"></i>
+              <span>Xóa tất cả</span>
+            </button>
+          </div>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>
+                <input type="checkbox" [ngModel]="areAllSelected()" (ngModelChange)="toggleSelectAll($event)">
+              </th>
+              <th>ID</th>
+              <th>Người dùng</th>
+              <th>Phim</th>
+              <th>Nội dung</th>
+              <th>Ngày</th>
+              <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let comment of paginatedComments">
+              <td>
+                <input type="checkbox" [(ngModel)]="comment.selected">
+              </td>
+              <td>{{ comment.id }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div>
+                    <div class="fw-bold">{{ comment.username }}</div>
+                    <small class="text-muted">{{ comment.email }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img [src]="comment.posterUrl" alt="Movie poster" class="me-2 movie-poster">
+                  <div>
+                    <div class="fw-bold">{{ comment.movieTitle }}</div>
+                    <small class="text-muted">{{ comment.year | date:'yyyy' }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="comment-content" title="{{comment.content}}">
+                  {{ comment.content }}
+                </div>
+              </td>
+              <td>
+                <div>{{ comment.createdAt | date:'dd/MM/yyyy' }}</div>
+                <small class="text-muted">{{ comment.createdAt | date:'HH:mm' }}</small>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-danger btn-sm"
+                          (click)="askForDeleteCommentConfirm(comment.movieId, comment.id)"
+                          title="Xóa bình luận">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  <button class="btn btn-secondary btn-sm"
+                          (click)="viewCommentDetail(comment)"
+                          title="Xem chi tiết">
+                    <i class="fas fa-info"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Comments Table -->
+    <ng-container *ngIf="!isSearching">
+      <div class="table-container">
+        <div class="loading-overlay" *ngIf="isLoading">
+          <div class="spinner-container">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Đang tải dữ liệu...</span>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Bulk Actions -->
+          <div class="bulk-actions-container" *ngIf="getSelectedComments().length > 0">
+            <span class="selection-count-text">
+              <strong>Đã chọn {{ getSelectedComments().length }}</strong> bình luận
+            </span>
+            <button class="bulk-delete-btn" (click)="askForBulkDeleteConfirm()">
+              <i class="fas fa-trash"></i>
+              <span>Xóa tất cả</span>
+            </button>
+          </div>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>
+                <input type="checkbox" [ngModel]="areAllSelected()" (ngModelChange)="toggleSelectAll($event)">
+              </th>
+              <th>ID</th>
+              <th>Người dùng</th>
+              <th>Phim</th>
+              <th>Nội dung</th>
+              <th>Ngày</th>
+              <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let comment of paginatedComments">
+              <td>
+                <input type="checkbox" [(ngModel)]="comment.selected">
+              </td>
+              <td>{{ comment.id }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div>
+                    <div class="fw-bold">{{ comment.username }}</div>
+                    <small class="text-muted">{{ comment.email }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img [src]="comment.posterUrl" alt="Movie poster" class="me-2 movie-poster">
+                  <div>
+                    <div class="fw-bold">{{ comment.movieTitle}}</div>
+                    <small class="text-muted">{{ comment.year| date:'yyyy' }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="comment-content" title="{{comment.content}}">
+                  {{ comment.content }}
+                </div>
+              </td>
+              <td>
+                <div>{{ comment.createdAt | date:'dd/MM/yyyy' }}</div>
+                <small class="text-muted">{{ comment.createdAt | date:'HH:mm' }}</small>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-danger btn-sm"
+                          (click)="askForDeleteCommentConfirm(comment.movieId, comment.id)"
+                          title="Xóa bình luận">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  <button class="btn btn-secondary btn-sm"
+                          (click)="viewCommentDetail(comment)"
+                          title="Xem chi tiết">
+                    <i class="fas fa-info"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!isLoading && paginatedComments.length === 0">
+              <td colspan="7" class="no-data-cell">
+                <div class="no-data-content"><i class="fas fa-inbox"></i><span>Không có dữ liệu để hiển thị</span></div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button class="page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="page-btn"
+        [class.active]="currentPage === page"
+        (click)="changePage(page)"
+      >
+        {{ page }}
+      </button>
+      <button class="page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<app-prompt-message
+  [isVisible]="isVisible"
+  [title]="promptTitle"
+  [message]="promptMessage"
+  confirmButtonText="Xóa"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()"
+></app-prompt-message>
+<app-comment-update
+  *ngIf="selectedComment"
+  [commentToEdit]="selectedComment"
+  (closeModal)="closeDetailModal()"
+  (commentUpdate)="handleCommentUpdated($event)"
+></app-comment-update>

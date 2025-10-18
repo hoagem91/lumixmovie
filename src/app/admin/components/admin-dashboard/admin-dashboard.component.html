@@ -1,0 +1,128 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Chào mừng trở lại, {{ adminUsername }}!</h1>
+    <p>Tổng quan hệ thống quản lý phim</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Đang tải dữ liệu...</p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading" class="dashboard-content">
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <!-- Movies Card -->
+      <div class="stat-card movies-card" (click)="navigateToMovies()">
+        <div class="stat-icon">
+          <i class="fas fa-film"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Tổng số phim</h3>
+          <p class="stat-number">{{ totalMovies }}</p>
+          <span class="stat-growth" [ngClass]="{'positive': isPositiveGrowth(moviesGrowth), 'negative': !isPositiveGrowth(moviesGrowth)}">
+            <i class="fas" [ngClass]="{'fa-arrow-up': isPositiveGrowth(moviesGrowth), 'fa-arrow-down': !isPositiveGrowth(moviesGrowth)}"></i>
+            {{ moviesGrowth >= 0 ? '+' : '' }}{{ moviesGrowth.toFixed(1) }}%
+          </span>
+        </div>
+      </div>
+
+      <!-- Users Card -->
+      <div class="stat-card users-card" (click)="navigateToUsers()">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Tổng người dùng</h3>
+          <p class="stat-number">{{ totalUsers }}</p>
+          <span class="stat-growth" [ngClass]="{'positive': isPositiveGrowth(usersGrowth), 'negative': !isPositiveGrowth(usersGrowth)}">
+            <i class="fas" [ngClass]="{'fa-arrow-up': isPositiveGrowth(usersGrowth), 'fa-arrow-down': !isPositiveGrowth(usersGrowth)}"></i>
+            {{ usersGrowth >= 0 ? '+' : '' }}{{ usersGrowth.toFixed(1) }}%
+          </span>
+        </div>
+      </div>
+
+      <!-- Comments Card -->
+      <div class="stat-card comments-card" (click)="navigateToComments()">
+        <div class="stat-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Tổng bình luận</h3>
+          <p class="stat-number">{{ totalComment }}</p>
+          <span class="stat-growth" [ngClass]="{'positive': isPositiveGrowth(commentsGrowth), 'negative': !isPositiveGrowth(commentsGrowth)}">
+            <i class="fas" [ngClass]="{'fa-arrow-up': isPositiveGrowth(commentsGrowth), 'fa-arrow-down': !isPositiveGrowth(commentsGrowth)}"></i>
+            {{ commentsGrowth >= 0 ? '+' : '' }}{{ commentsGrowth.toFixed(1) }}%
+          </span>
+        </div>
+      </div>
+
+      <!-- Categories Card -->
+      <div class="stat-card category-card" (click)="navigateToCategories()">
+        <div class="stat-icon">
+          <i class="fa-solid fa-tags"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Tổng thể loại</h3>
+          <p class="stat-number">{{ totalCategories }}</p>
+          <span class="stat-growth" [ngClass]="{'positive': isPositiveGrowth(categoriesGrowth), 'negative': !isPositiveGrowth(categoriesGrowth)}">
+            <i class="fas" [ngClass]="{'fa-arrow-up': isPositiveGrowth(categoriesGrowth), 'fa-arrow-down': !isPositiveGrowth(categoriesGrowth)}"></i>
+            {{ categoriesGrowth >= 0 ? '+' : '' }}{{ categoriesGrowth.toFixed(1) }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <!-- Bar Chart - Movies by Genre -->
+      <div class="chart-card">
+        <canvas baseChart
+                [datasets]="barChartData.datasets"
+                [labels]="barChartData.labels"
+                [options]="barChartOptions"
+                [legend]="barChartLegend"
+                [type]="barChartType"
+                [plugins]="barChartPlugins">
+        </canvas>
+      </div>
+
+      <!-- Pie Chart - Users by Role -->
+      <div class="chart-card">
+        <canvas baseChart
+                [data]="pieChartData"
+                [options]="pieChartOptions"
+                [legend]="pieChartLegend"
+                [type]="pieChartType"
+                [plugins]="pieChartPlugins">
+        </canvas>
+      </div>
+
+      <!-- Line Chart - Comments Over Time -->
+      <div class="chart-card full-width">
+        <canvas baseChart
+                [datasets]="lineChartData.datasets"
+                [labels]="lineChartData.labels"
+                [options]="lineChartOptions"
+                [legend]="lineChartLegend"
+                [type]="lineChartType"
+                [plugins]="lineChartPlugins">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Additional Info Section -->
+    <div class="info-section">
+      <div class="info-card">
+        <i class="fas fa-info-circle"></i>
+        <div class="info-content">
+          <h4>Thông tin hệ thống</h4>
+          <p>Dữ liệu được cập nhật tự động. Click vào các card để quản lý chi tiết.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

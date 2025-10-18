@@ -1,0 +1,85 @@
+<div class="container">
+  <!-- 1. Header của trang -->
+  <div class="page-header">
+    <h1>Quản lý Thể loại</h1>
+    <button class="add-btn" (click)="openGenreModal()">
+      <i class="fas fa-plus"></i> Thêm Thể loại
+    </button>
+  </div>
+
+  <!-- 2. Trạng thái Loading, Error, Empty -->
+  <div *ngIf="isLoading" class="state-container">
+    <div class="spinner"></div>
+    <p>Đang tải danh sách thể loại...</p>
+  </div>
+
+  <div *ngIf="!isLoading && error" class="state-container error">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadGenres()">Thử lại</button>
+  </div>
+
+  <div *ngIf="!isLoading && !error && genres.length === 0" class="state-container empty">
+    <i class="fas fa-folder-open"></i>
+    <p>Chưa có thể loại nào. Hãy bắt đầu bằng cách thêm một thể loại mới.</p>
+  </div>
+
+  <!-- 3. Bảng danh sách thể loại -->
+  <div class="table-container" *ngIf="!isLoading && genres.length > 0">
+    <table>
+      <thead>
+      <tr>
+        <th>Tên Thể loại</th>
+        <th>Số lượng phim</th>
+        <th class="actions-header">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let genre of genres">
+        <td>{{ genre.name }}</td>
+        <td>{{ movieCounts[genre.id] || 0 }}</td>
+        <td class="actions">
+          <button class="action-btn edit-btn" (click)="openGenreModal(genre)" title="Sửa">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="action-btn delete-btn" (click)="confirmDelete(genre)" title="Xóa">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. Modal để Thêm/Sửa thể loại -->
+  <div class="modal-overlay" *ngIf="isModalOpen">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>{{ isEditing ? 'Chỉnh sửa Thể loại' : 'Thêm Thể loại mới' }}</h2>
+      <form [formGroup]="genreForm" (ngSubmit)="saveGenre()">
+        <div class="form-group">
+          <label for="genreName">Tên thể loại</label>
+          <input id="genreName" type="text" formControlName="name" placeholder="Ví dụ: Hành Động">
+          <div *ngIf="genreForm.get('name')?.invalid && (genreForm.get('name')?.dirty || genreForm.get('name')?.touched)" class="error-text">
+            Tên thể loại là bắt buộc.
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">Hủy</button>
+          <button type="submit" class="save-btn" [disabled]="genreForm.invalid || isSubmitting">
+            <span *ngIf="!isSubmitting">Lưu</span>
+            <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Component xác nhận xóa -->
+  <app-prompt-message
+    [isVisible]="isDeleteConfirmVisible"
+    title="Xác nhận Xóa"
+    [message]="'Bạn có chắc chắn muốn xóa thể loại \'' + (genreToDelete?.name || '') + '\' không?'"
+    (onConfirm)="deleteGenre()"
+    (onCancel)="isDeleteConfirmVisible = false">
+  </app-prompt-message>
+</div>

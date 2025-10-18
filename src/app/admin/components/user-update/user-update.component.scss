@@ -1,0 +1,180 @@
+// --- Biến màu chủ đạo (Tách biệt để component tự quản lý) ---
+$netflix-red: #E50914;
+$netflix-dark-bg: #111827; // Màu nền chính
+$netflix-dark-card: #1f2937; // Màu nền cho card, table
+$text-primary: #f9fafb; // Màu chữ chính
+$text-secondary: #9ca3af; // Màu chữ phụ
+$border-color: #374151; // Màu viền
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: $netflix-dark-card;
+  padding: 24px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid $border-color;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $border-color;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    color: $text-primary;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: $text-secondary;
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+}
+
+.modal-body {
+  .form-group {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      background-color: $netflix-dark-bg;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      color: $text-primary;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: $netflix-red;
+        box-shadow: 0 0 0 2px rgba($netflix-red, 0.3);
+      }
+
+      &[readonly] {
+        background-color: lighten($netflix-dark-bg, 5%);
+        cursor: not-allowed;
+      }
+    }
+
+    .error-text {
+      color: $netflix-red;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .roles-container {
+      display: flex;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .checkbox-label {
+        color: $text-primary;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: $netflix-red; // Tô màu checkbox khi được chọn
+      }
+    }
+  }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid $border-color;
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    border: none;
+
+    &.btn-secondary {
+      background-color: transparent;
+      color: $text-secondary;
+      border: 1px solid $border-color;
+
+      &:hover {
+        background-color: $netflix-dark-card;
+        border-color: $text-secondary;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $netflix-red;
+      color: white;
+
+      &:hover {
+        background-color: darken($netflix-red, 10%);
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

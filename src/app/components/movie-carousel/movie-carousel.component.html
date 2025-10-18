@@ -1,0 +1,126 @@
+<section class="movie-section">
+  <div class="section-header">
+    <div class="section-title-container">
+      <h2 class="section-title">{{ title }}</h2>
+      <div class="see-all-link" (click)="onSeeAllClick()">
+        <span class="see-all-text">Xem tất cả</span>
+        <i class="fas fa-angle-right"></i>
+      </div>
+    </div>
+    <div class="section-controls">
+      <button class="control-btn" (click)="scrollLeft()">‹</button>
+      <button class="control-btn" (click)="scrollRight()">›</button>
+    </div>
+  </div>
+
+  <div class="movie-carousel" #movieContainer>
+    <div class="movie-list">
+      <ng-container *skeleton="isLoading;repeat:setupResponsiveSkeleton();className:'movie-card';height:'300px';width:'200px'"></ng-container>
+      <div *ngFor="let item of movies; let i = index ;let last=last"
+           class="movie-card"
+           [class.hovered]="hoveredMovieId === item.id && !isGenre"
+           (mouseenter)="onMouseEnter(item)"
+           (mouseleave)="onMouseLeave()"
+           (click)="onMovieClick(item)"
+      >
+        <!--Poster Image-->
+        <div class="movie-poster">
+          <img [src]="item.posterUrl"
+               [alt]="item.title"
+               class="poster-image"
+               [class.hidden]="hoveredMovieId === item.id"
+          >
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h4 class="movie-title">{{ item.title }}</h4>
+              <p class="movie-year" *ngIf="item.year">{{ item.year | date:'yyyy' }}</p>
+            </div>
+          </div>
+          <div *ngIf="i < 3" class="rank-badge">{{ i + 1 }}</div>
+        </div>
+        <!--Video Overlay-->
+        <div class="video-overlay"
+             [class.show]="hoveredMovieId === item.id"
+             [class.start-of-list]="i === 0"
+             [class.end-of-list]="last"
+
+        >
+          <video
+            *ngIf="hoveredMovieId === item.id"
+            [src]="item.videoUrl"
+            autoplay
+            [muted]="isMuted"
+            loop
+            class="hover-video"
+            #videoPlayer
+          ></video>
+
+          <!-- Control Buttons -->
+          <div class="video-controls" *ngIf="hoveredMovieId === item.id">
+            <button
+              class="control-btn play-btn"
+              (click)="playMovie(item)"
+              title="Xem ngay"
+            >
+              <i class="fas fa-play"></i>
+              Xem ngay
+            </button>
+
+            <button
+              class="control-btn add-btn"
+              [class.is-favorite]="isFavorite(item.id)"
+              (click)="toggleFavorite(item, $event)"
+              [disabled]="isProcessing(item.id)"
+              title="isFavorite(item.id) ? 'Xóa khỏi danh sách yêu thích' : 'Thêm vào danh sách yêu thích'"
+            >
+              <i *ngIf="isProcessing(item.id)" class="fas fa-spinner fa-spin"></i>
+              <ng-container *ngIf="!isProcessing(item.id) && !isFavorite(item.id)">
+                <i class="fas fa-heart"></i>
+                <span>Yêu thích</span>
+              </ng-container>
+              <ng-container *ngIf="!isProcessing(item.id) && isFavorite(item.id)">
+                <i class="fas fa-heart" style="color: red;"></i>
+                <span style="color: red;">Yêu thích</span>
+              </ng-container>
+            </button>
+
+            <button
+              class="control-btn detail-btn"
+              (click)="getMovieDetails(item)"
+              title="Chi tiết"
+            >
+              <i class="fas fa-info-circle"></i>
+              Chi tiết
+            </button>
+            <button class="sound-icon" (click)="toggleSound($event)"
+                    [attr.aria-label]="isMuted ? 'Bật tiếng' : 'Tắt tiếng'">
+              <img *ngIf="isMuted" src="assets/sound-slash.svg" alt="Unmute">
+              <img *ngIf="!isMuted" src="assets/sound.svg" alt="Mute">
+            </button>
+            <div class="movie-overlay">
+              <div class="movie-info"
+                   style="display: flex;left:0;bottom: -42px;gap: 8px;font-weight: 600;align-items: center">
+                <p class="movie-year" *ngIf="item.year">{{ item.year | date:'yyyy' }}</p>
+                <span>|</span>
+                <p class="movie-year">{{ item.rating }}</p>
+                <span>|</span>
+                <p class="movie-year">{{ item.duration }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-overlay" *ngIf="showAuthPrompt" (click)="closeAuthPrompt()">
+      <div class="auth-prompt" (click)="$event.stopPropagation()">
+        <h3>Trải nghiệm chưa trọn vẹn!</h3>
+        <p>Vui lòng đăng nhập hoặc đăng ký để khám phá toàn bộ tính năng và lưu lại danh sách phim của bạn.</p>
+        <div class="auth-prompt-actions">
+          <a routerLink="/login" class="prompt-button login">Đăng Nhập</a>
+          <a routerLink="/register" class="prompt-button register">Đăng Ký</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div class="page-container loading-container" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Đang tải dữ liệu phim...</p>
+</div>
+<div class="page-container error-container" *ngIf="!loading && error">
+  <i class="fas fa-exclamation-triangle"></i>
+  <p>{{ error }}</p>
+  <button (click)="loadPageData()">Thử lại</button>
+</div>
+<div class="streaming-app">
+  <app-hero-section [movies]="releaseMovies"></app-hero-section>
+  <app-category-cards [categories]="ourGenres"></app-category-cards>
+  <div class="content-sections">
+    <div class="tag-section">Phim & Shows</div>
+    <app-top-movies
+      title="Top phim hay hôm nay"
+      [movies]="actionMovies"
+    >
+    </app-top-movies>
+    <app-movie-carousel
+      title="Phim đề xuất cho bạn"
+      subTitle = "Phiêu lưu"
+      [movies]="proposeMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim mới phát hành"
+      subTitle = "Trending"
+      [movies]="releaseMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim xu hướng"
+      subTitle = "Trending"
+      [movies]="trendingMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim phổ biến"
+      subTitle = "Phổ biến"
+      [movies]="popularMovies">
+    </app-movie-carousel>
+    <app-dashboard-comment
+      [movies]="releaseMovies"
+    ></app-dashboard-comment>
+    <app-movie-carousel
+      title="Phim tình cảm"
+      subTitle = "Tình cảm"
+      [movies]="romanticMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim hành động"
+      subTitle = "Hành động"
+      [movies]="actionMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim hài hước"
+      subTitle = "Hài hước"
+      [movies]="funnyMovies">
+    </app-movie-carousel>
+    <app-movie-carousel
+      title="Phim hoạt hình"
+      subTitle = "Hoạt hình"
+      [movies]="cartoonMovies">
+    </app-movie-carousel>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,42 @@
+
+<div class="popup-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    <div class="popup-header">
+      <h3 class="popup-title">
+        {{ title }}
+      </h3>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+
+    <div class="popup-body">
+      <!-- Hiển thị danh sách động theo type -->
+      <div class="popup-list">
+
+        <!-- Trường hợp phim -->
+        <div *ngIf="type === 'movies'">
+          <div class="trending-item" *ngFor="let item of items | slice:0:10; let i = index">
+            <span class="rank">{{ i + 1 }}.</span>
+            <img [src]="item.posterUrl" [alt]="item.title" class="trending-thumb">
+            <span class="trending-title">{{ item.title }}</span>
+          </div>
+        </div>
+
+        <!-- Trường hợp thể loại -->
+        <div *ngIf="type === 'categories'">
+          <div class="category-item" *ngFor="let item of items| slice:0:10; let i = index">
+            <span class="rank">{{ i + 1 }}.</span>
+            <span class="category-badge">{{ item.name }}</span>
+          </div>
+        </div>
+
+        <!-- Trường hợp bình luận -->
+        <div *ngIf="type === 'comments'">
+          <div class="comment-item" *ngFor="let item of items| slice:0:10; let i = index">
+            <span class="username">{{ item.username }}</span>:
+            <span class="comment-text">{{ item.content }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

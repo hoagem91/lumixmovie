@@ -1,0 +1,23 @@
+<div class="verify-container">
+  <!-- Trạng thái chờ (sau khi đăng ký) -->
+  <div *ngIf="verificationStatus === 'pending'" class="state-card">
+    <i class="fas fa-envelope-open-text icon"></i>
+    <h2>Đăng ký thành công!</h2>
+    <p>Chúng tôi đã gửi một email kích hoạt đến địa chỉ của bạn. Vui lòng kiểm tra hộp thư và nhấp vào liên kết để hoàn tất.</p>
+  </div>
+
+  <!-- Trạng thái thành công (sau khi redirect từ backend) -->
+  <div *ngIf="verificationStatus === 'success'" class="state-card success">
+    <i class="fas fa-check-circle icon"></i>
+    <h2>Xác thực thành công!</h2>
+    <p>Tài khoản của bạn đã được kích hoạt. Đang chuyển hướng đến trang đăng nhập...</p>
+  </div>
+
+  <!-- Trạng thái lỗi (sau khi redirect từ backend) -->
+  <div *ngIf="verificationStatus === 'error'" class="state-card error">
+    <i class="fas fa-times-circle icon"></i>
+    <h2>Xác thực thất bại!</h2>
+    <p>{{ errorMessage }}</p>
+    <button (click)="navigateToLogin()" class="action-button">Quay lại trang Đăng nhập</button>
+  </div>
+</div>

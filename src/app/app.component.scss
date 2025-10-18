@@ -1,0 +1,91 @@
+/* --- Notification Banner Styles --- */
+.notification-banner {
+  position: fixed;
+  top: 80px; /* Dưới header */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+  text-align: center;
+  animation: slideDown 0.5s ease-out;
+}
+
+.notification-error {
+  background-color: #e50914; /* Màu đỏ của Netflix */
+}
+
+.notification-success {
+  background-color: #46d369; /* Màu xanh lá */
+}
+
+.notification-info {
+  background-color: #3498db; /* Màu xanh dương */
+}
+
+@keyframes slideDown {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  to {
+    top: 80px;
+    opacity: 1;
+  }
+}
+/* --- Session Expired Overlay Styles --- */
+.session-expired-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 9998; /* Dưới banner một chút nhưng trên mọi thứ khác */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.session-expired-prompt {
+  background: #1a1a1a;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 500px;
+  border: 1px solid #404040;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  color: white;
+
+  i {
+    font-size: 3rem;
+    color: #e50914; // Màu đỏ cảnh báo
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #b3b3b3;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

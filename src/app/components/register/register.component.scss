@@ -1,0 +1,258 @@
+// Variables
+$primary-color: #e50914; // Màu đỏ chủ đạo
+$primary-dark: #b8070f;
+$background-dark: #0f0f0f; // Màu nền chính của app
+$background-container: #1a1a1a; // Màu nền cho khung đăng nhập
+$background-input: #333333; // Màu nền cho các ô nhập liệu
+$text-primary: #ffffff;
+$text-secondary: #b3b3b3;
+$error-color: #ef4444;
+$success-color: #10b981;
+$border-color: #404040;
+$border-focus: $primary-color;
+$shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+$shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.3);
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+.login-wrapper {
+  min-height: 100vh;
+  @include flex-center;
+  background-color: $background-dark;
+  padding: 20px;
+  position: relative;
+}
+
+.login-container {
+  background: $background-container;
+  border-radius: 16px;
+  box-shadow: $shadow-lg;
+  padding: 48px;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+
+  @media (max-width: 640px) {
+    padding: 32px 24px;
+    margin: 0 16px;
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.025em;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 20px;
+
+    // Add extra space before the submit button
+    &:last-of-type {
+      margin-top: 32px;
+      margin-bottom: 0;
+    }
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-primary;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .input-wrapper {
+    position: relative;
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 2px solid $border-color;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: $text-primary;
+      background-color: $background-input;
+      @include transition(border-color, box-shadow);
+
+      &::placeholder {
+        color: $text-secondary;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $border-focus;
+        box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+      }
+
+      // Style cho các trường không hợp lệ
+      &.ng-invalid.ng-touched,
+      &.ng-invalid.ng-dirty {
+        border-color: $error-color;
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba($error-color, 0.2);
+        }
+      }
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-secondary;
+      font-size: 0.875rem;
+      pointer-events: none;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: $text-secondary;
+      cursor: pointer;
+      padding: 4px;
+
+      &:hover {
+        color: $text-primary;
+      }
+    }
+  }
+
+  // Style cho thông báo lỗi của từng trường
+  .field-error {
+    color: $error-color;
+    font-size: 0.875rem;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .login-button {
+    width: 100%;
+    padding: 12px 24px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover:not(:disabled) {
+      background-color: $primary-dark;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .loading-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      i {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  // Shared styles for error and success messages
+  .error-message,
+  .success-message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+  }
+
+  .error-message {
+    background-color: rgba($error-color, 0.1);
+    border: 1px solid rgba($error-color, 0.3);
+    color: $error-color;
+  }
+
+  .success-message {
+    background-color: rgba($success-color, 0.1);
+    border: 1px solid rgba($success-color, 0.3);
+    color: $success-color;
+  }
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+
+  p {
+    color: $text-primary;
+    font-size: 0.875rem;
+    margin: 0;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+      @include transition(color);
+
+      &:hover {
+        color: $primary-dark;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 24px 20px;
+  }
+
+  .login-header h2 {
+    font-size: 1.5rem;
+  }
+}

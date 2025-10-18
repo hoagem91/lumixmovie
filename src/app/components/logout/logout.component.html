@@ -1,0 +1,20 @@
+<nav>
+  <!-- Các mục menu khác -->
+  <ul>
+    <li><a routerLink="/movie">Phim</a></li>
+    <!-- ... -->
+  </ul>
+
+  <!-- Logic hiển thị nút Login/Logout -->
+  <div>
+    <!-- Nếu người dùng đã đăng nhập, hiển thị nút Logout -->
+    <button *ngIf="authService.isLoggedIn()" (click)="onLogout()">
+      Đăng xuất
+    </button>
+
+    <!-- Nếu người dùng chưa đăng nhập, có thể hiển thị nút Login -->
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/login">
+      Đăng nhập
+    </a>
+  </div>
+</nav>

@@ -1,0 +1,24 @@
+<app-header></app-header>
+<div class="movie-grid-container">
+  <div [style.background-color]=""></div>
+  <h3>{{ categoryTitle }}</h3>
+  <div class="movie-grid">
+    <div *ngFor="let movie of movies" class="movie-card" (click)="onMovieClick(movie)">
+      <div class="movie-thumbnail">
+        <img [src]="movie.posterUrl" [alt]="movie.title"/>
+        <div class="movie-overlay">
+          <div class="play-button">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="24" fill="rgba(255,255,255,0.9)"/>
+              <path d="M19 15L33 24L19 33V15Z" fill="#1a1a2e"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="movie-info">
+        <h3 class="movie-title">{{ movie.title }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

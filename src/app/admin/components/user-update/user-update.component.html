@@ -1,0 +1,43 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Chỉnh sửa người dùng</h3>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="updateForm" (ngSubmit)="onSave()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" formControlName="username" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" class="form-control">
+          <div *ngIf="updateForm.get('email')?.invalid && updateForm.get('email')?.touched" class="error-text">
+            <small *ngIf="updateForm.get('email')?.errors?.['required']">Email không được bỏ trống</small>
+            <small *ngIf="updateForm.get('email')?.errors?.['email']">Email không hợp lệ.</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Vai trò</label>
+          <div class="roles-container" formArrayName="roles">
+            <div *ngFor="let role of rolesFormArray.controls;let i=index" class="checkbox-group">
+              <input type="checkbox" [formControlName]="i" [id]="'role-'+i">
+              <label [for]="'role-'+i" class="checkbox-label">{{ allAvailableRoles[i] | titlecase }}</label>
+            </div>
+          </div>
+          <div *ngIf="rolesFormArray.invalid && (rolesFormArray.dirty|| rolesFormArray.touched)" class="error-text">
+            <span *ngIf="rolesFormArray.errors?.['requiredOneCheckbox']">Vui lòng chọn ít nhất một vai trò.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onCancel()">Hủy</button>
+      <button class="btn btn-primary" (click)="onSave()" [disabled]="updateForm.invalid||isSubmitting">
+        <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+        {{ isSubmitting ? 'Đang lưu....' : 'Lưu thay đổi' }}
+      </button>
+    </div>
+  </div>
+</div>

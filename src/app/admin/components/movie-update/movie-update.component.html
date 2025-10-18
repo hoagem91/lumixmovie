@@ -1,0 +1,177 @@
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Cập Nhật Phim</h1>
+    <p class="page-subtitle">Tìm kiếm và cập nhât phim.</p>
+  </div>
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text"
+           placeholder="Nhập tên phim để tìm kiếm..."
+           class="search-input"
+           [formControl]="searchQuery"
+    />
+  </div>
+  <div class="results-container">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner-container" *ngIf="isSearching">
+      <div class="loading-spinner"></div>
+    </div>
+    <!-- Search Results -->
+    <ul class="search-results" *ngIf="!isSearching && searchResults.length > 0">
+      <li *ngFor="let movie of searchResults" class="movie-item">
+        <img [src]="movie.posterUrl" [alt]="movie.title" class="movie-poster">
+        <div class="movie-info">
+          <h3 class="movie-title">{{ movie.title }}</h3>
+          <p class="movie-year">{{ movie.year }}</p>
+        </div>
+        <button class="delete-button" (click)="toggleUpdateForm(movie)">
+          <i class="fas fa-edit"></i>
+          <span>Cập nhật</span>
+        </button>
+      </li>
+    </ul>
+    <div class="no-results" *ngIf="!isSearching && searchResults.length === 0 && searchQuery.value">
+      <i class="fas fa-video-slash"></i>
+      <p>Không tìm thấy phim nào khớp với '{{ searchQuery.value }}'.</p>
+    </div>
+    <div class="no-results initial-prompt" *ngIf="!searchQuery.value">
+      <p>Sử dụng thanh tìm kiếm ở trên để tìm phim bạn muốn cập nhật.</p>
+    </div>
+    <form [formGroup]="movieForm" *ngIf="selectedMovieForUpdate">
+      <div class="form-grid">
+        <!-- Left Column -->
+        <div>
+          <div class="form-group">
+            <label class="form-label">Tên Phim *</label>
+            <input type="text" class="form-input" formControlName="title">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thể loại</label>
+            <input type="text" class="form-input" formControlName="genres">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thời lượng (phút)</label>
+            <input type="text" class="form-input" formControlName="duration">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Năm phát hành</label>
+            <input type="number" class="form-input" formControlName="year">
+          </div>
+
+          <!-- Video Change -->
+          <div class="form-group">
+            <label class="form-label">Video Phim</label>
+
+            <div class="video-upload" (click)="!isUploadingVideo && videoInput.click()">
+              <!-- Video Preview -->
+              <video *ngIf="videoPreview || (selectedMovieForUpdate && selectedMovieForUpdate.videoUrl)"
+                     [src]="videoPreview || selectedMovieForUpdate.videoUrl"
+                     class="video-preview"
+                     controls
+                     (click)="$event.stopPropagation()">
+                Trình duyệt của bạn không hỗ trợ thẻ video.
+              </video>
+
+              <!-- Placeholder when no video is available -->
+              <div *ngIf="!videoPreview && !(selectedMovieForUpdate && selectedMovieForUpdate.videoUrl)"
+                   class="video-placeholder">
+                <i class="fas fa-film video-placeholder-icon"></i>
+                <p class="video-placeholder-text">Nhấp để chọn video</p>
+                <p class="video-placeholder-subtext">Hỗ trợ các định dạng video phổ biến</p>
+              </div>
+            </div>
+
+            <input #videoInput type="file" class="file-input" accept="video/*" (change)="onVideoSelected($event)">
+
+            <div class="action-buttons">
+              <button type="button" class="btn btn-secondary" (click)="videoInput.click()"
+                      [disabled]="isUploadingVideo">
+                <i class="fas fa-video"></i>
+                <span>Thay đổi video</span>
+              </button>
+              <button type="button" class="btn btn-primary" (click)="uploadVideo()" *ngIf="selectedVideoFile"
+                      [disabled]="isUploadingVideo">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>{{ isUploadingVideo ? 'Đang tải lên...' : 'Tải lên video' }}</span>
+              </button>
+            </div>
+
+            <div class="upload-progress" *ngIf="isUploadingVideo">
+              <div class="upload-progress-bar" [style.width.%]="videoUploadProgress"></div>
+            </div>
+            <div class="file-info" *ngIf="newVideoUrl">
+              <p><strong>URL video mới:</strong> {{ newVideoUrl }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div>
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-input form-textarea"
+                      formControlName="description"></textarea>
+          </div>
+          <!-- Poster Change -->
+          <div class="form-group">
+            <label class="form-label">Poster Phim</label>
+            <div class="poster-upload" (click)="!isUploadingPoster && posterInput.click()">
+              <!-- Image Preview -->
+              <img *ngIf="posterPreview || (selectedMovieForUpdate && selectedMovieForUpdate.posterUrl)"
+                   [src]="posterPreview || selectedMovieForUpdate.posterUrl"
+                   [alt]="selectedMovieForUpdate.title"
+                   class="poster-preview"
+                   (click)="$event.stopPropagation()">
+
+              <!-- Placeholder when no image is available -->
+              <div *ngIf="!posterPreview && !(selectedMovieForUpdate && selectedMovieForUpdate.posterUrl)"
+                   class="poster-placeholder">
+                <i class="fas fa-image poster-placeholder-icon"></i>
+                <p class="poster-placeholder-text">Nhấp để chọn poster</p>
+                <p class="poster-placeholder-subtext">Hỗ trợ các định dạng ảnh phổ biến</p>
+              </div>
+            </div>
+            <input #posterInput type="file" class="file-input" accept="image/*" (change)="onPosterSelected($event)">
+
+            <div class="action-buttons">
+              <button type="button" class="btn btn-secondary" (click)="posterInput.click()"
+                      [disabled]="isUploadingPoster">
+                <i class="fas fa-image"></i>
+                <span>Thay đổi poster</span>
+              </button>
+              <button type="button" class="btn btn-primary" (click)="uploadPoster()" *ngIf="selectedPosterFile"
+                      [disabled]="isUploadingPoster">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>{{ isUploadingPoster ? 'Đang tải lên...' : 'Tải lên poster' }}</span>
+              </button>
+            </div>
+            <div class="upload-progress" *ngIf="isUploadingPoster">
+              <div class="upload-progress-bar" [style.width.%]="posterUploadProgress"></div>
+            </div>
+            <!-- Hiển thị URL sau khi upload -->
+            <div class="file-info" *ngIf="newPosterUrl">
+              <p><strong>URL Image mới:</strong> {{ newPosterUrl }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="submit-movie">
+          <button type="button" class="btn btn-primary"
+                  (click)="askForUpdateConfirmation(selectedMovieForUpdate.id, selectedMovieForUpdate.title)">
+            <i class="fas fa-check"></i> Cập nhật
+          </button>
+        </div>
+        <app-prompt-message
+          [title]="selectedMovieForUpdate.title"
+          [isVisible]="isPromptVisible"
+          [message]="promptMessage"
+          confirmButtonText="Cập nhật"
+          (onConfirm)="confirmUpdate()"
+          (onCancel)="isPromptVisible = false"
+        ></app-prompt-message>
+      </div>
+    </form>
+  </div>
+</div>
