@@ -68,7 +68,7 @@ export class AuthService {
 
   register(username: string, password: string, email: string): Observable<RegisterResponse> {
     const newUser = {username, password, email}
-    return this.http.post<RegisterResponse>(this.userUrl, newUser);
+    return this.http.post<RegisterResponse>(this.userUrl, newUser,{withCredentials:true});
   }
 
   getUserId() {
