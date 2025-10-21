@@ -13,30 +13,30 @@ import {LoginSuccessComponent} from "./pages/login-success/login-success.compone
 import {MovieGridComponent} from "./components/movie-grid/movie-grid.component";
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'logout', component: LoginComponent},
-  {path: 'home', component: HomeComponent},
-  {path: 'movies', component: MovieComponent},
-  {path: 'register', component: RegisterComponent},
-  {path:'movies/:id',component:MovieDetailComponent},
-  {path:'category/:slug',component:MovieGridComponent},
-  {path:'favorites',component:FavoritesComponent},
-  {path:"profile",component:ProfileComponent},
-  {path:'history',component:WatchHistoryComponent},
-  {path:'registration-pending',component:VerifyAccountComponent},
-  {path:"verify-account/:token",component:VerifyAccountComponent},
-  {path:"login-success",component:LoginSuccessComponent},
+  {path: 'login', component: LoginComponent, title: 'Lumix – Đăng nhập'},
+  {path: 'logout', component: LoginComponent, title: 'Lumix – Đăng xuất'},
+  {path: 'home', component: HomeComponent, title: 'Lumix – Xem phim trực tuyến'},
+  {path: 'movies', component: MovieComponent, title: 'Lumix – Danh sách phim'},
+  {path: 'register', component: RegisterComponent, title: 'Lumix – Đăng ký tài khoản'},
+  {path: 'movies/:id', component: MovieDetailComponent, title: 'Lumix – Chi tiết phim'},
+  {path: 'category/:slug', component: MovieGridComponent, title: 'Lumix – Danh mục phim'},
+  {path: 'favorites', component: FavoritesComponent, title: 'Lumix – Danh sách yêu thích'},
+  {path: 'profile', component: ProfileComponent, title: 'Lumix – Hồ sơ cá nhân'},
+  {path: 'history', component: WatchHistoryComponent, title: 'Lumix – Lịch sử xem phim'},
+  {path: 'registration-pending', component: VerifyAccountComponent, title: 'Lumix – Xác minh tài khoản'},
+  {path: 'verify-account/:token', component: VerifyAccountComponent, title: 'Lumix – Kích hoạt tài khoản'},
+  {path: 'login-success', component: LoginSuccessComponent, title: 'Lumix – Đăng nhập thành công'},
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    title: 'Lumix – Quản trị'
   },
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: '**', redirectTo: '/home'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

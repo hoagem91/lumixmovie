@@ -15,22 +15,22 @@ import {AdminGuard} from "../guards/admin.guard";
 import {GenreManagementComponent} from "./components/genre-management/genre-management.component";
 
 const routes: Routes = [
-  {path: "login", component: LoginAdminComponent},
+  { path: "login", component: LoginAdminComponent, title: "Lumix Admin – Đăng nhập" },
   {
     path: '',
     component: AdminLayoutComponent,
-    canActivate:[AdminGuard],
+    canActivate: [AdminGuard],
     children: [
-      {path: 'dashboard', component: AdminDashboardComponent},
-      {path: "movies/create", component: MovieManagementComponent},
-      {path: "movies/update", component: MovieUpdateComponent, canDeactivate: [UnsavedChangesGuard]},
-      {path: "movies/delete", component: MovieDeleteComponent},
-      {path: 'users', component: UserManagementComponent},
-      {path: 'users/create', component: UserCreateComponent},
-      {path: 'users/update', component: UserUpdateComponent, canDeactivate: [UnsavedChangesGuard]},
-      {path: 'comments', component: CommentManagementComponent},
-      {path: 'genres', component: GenreManagementComponent},
-      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      { path: 'dashboard', component: AdminDashboardComponent, title: 'Lumix Admin – Bảng điều khiển' },
+      { path: "movies/create", component: MovieManagementComponent, title: 'Lumix Admin – Thêm phim mới' },
+      { path: "movies/update", component: MovieUpdateComponent, canDeactivate: [UnsavedChangesGuard], title: 'Lumix Admin – Cập nhật phim' },
+      { path: "movies/delete", component: MovieDeleteComponent, title: 'Lumix Admin – Xóa phim' },
+      { path: 'users', component: UserManagementComponent, title: 'Lumix Admin – Quản lý người dùng' },
+      { path: 'users/create', component: UserCreateComponent, title: 'Lumix Admin – Thêm người dùng' },
+      { path: 'users/update', component: UserUpdateComponent, canDeactivate: [UnsavedChangesGuard], title: 'Lumix Admin – Cập nhật người dùng' },
+      { path: 'comments', component: CommentManagementComponent, title: 'Lumix Admin – Quản lý bình luận' },
+      { path: 'genres', component: GenreManagementComponent, title: 'Lumix Admin – Quản lý thể loại' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
 ];
@@ -39,5 +39,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminRoutingModule {
-}
+export class AdminRoutingModule { }
