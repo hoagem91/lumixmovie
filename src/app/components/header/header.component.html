@@ -90,14 +90,22 @@
     </div>
     <a *ngIf="!isLoggedIn" routerLink="/login" class="login-prompt" (click)="closeMenu()">Đăng nhập / Đăng ký</a>
   </div>
-  <a routerLink="/home" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
-    class="fas fa-home"></i> Trang Chủ</a>
-  <a routerLink="/movies" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
-    class="fas fa-film"></i> Phim & Shows</a>
-  <a routerLink="/tv-shows" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
-    class="fas fa-tv"></i> Hỗ trợ</a>
-  <a routerLink="/favorites" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()"><i
-    class="fas fa-list"></i> Danh Sách Của Tôi</a>
+  <a routerLink="/home" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()">
+    <i class="fas fa-house"></i> Trang Chủ
+  </a>
+
+  <a routerLink="/movies" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()">
+    <i class="fas fa-clapperboard"></i> Phim & Shows
+  </a>
+
+  <a routerLink="/history" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()">
+    <i class="fas fa-clock-rotate-left"></i> Lịch Sử Xem
+  </a>
+
+  <a routerLink="/favorites" routerLinkActive="active-link" class="nav-link" (click)="closeMenu()">
+    <i class="fas fa-heart"></i> Danh Sách Của Tôi
+  </a>
+
   <div class="mobile-menu-footer">
     <button *ngIf="isLoggedIn" (click)="logoutAndCloseMenu()" class="auth-button logout">
       <i class="fas fa-sign-out-alt"></i>

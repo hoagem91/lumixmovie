@@ -176,7 +176,7 @@
   }
 
   .footer-sections {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .social-links {
