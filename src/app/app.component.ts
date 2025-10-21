@@ -8,7 +8,7 @@ import {NotificationService, Notification} from "./services/notification.service
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'UiLumix';
+  title = 'Lumix';
 
   constructor() {
   }
