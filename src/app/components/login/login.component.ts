@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
 import {NotificationService} from "../../services/notification.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {environment} from "../../../environments/environment.prod";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean = false;
   isLoading: boolean = false;
   error: string | null = null;
-
+  googleLoginUrl = `${environment.apiUrl}/oauth2/authorization/google`;
   constructor(private fb:FormBuilder,private authService: AuthService, private router: Router, private notification: NotificationService) {
     this.loginForm = this.fb.group({
       username: ['',[Validators.required,Validators.minLength(3)]],
