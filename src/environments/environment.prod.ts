@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "https://luminous-unity-production.up.railway.app/lumix"
+  apiUrl: "https://lumixmovie-server-production.up.railway.app/lumix"
 };
