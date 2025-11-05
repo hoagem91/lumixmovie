@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean = false;
   isLoading: boolean = false;
   error: string | null = null;
-  googleLoginUrl = `${environment.apiUrl}/login/oauth2/authorization/google`;
+  googleLoginUrl = `${environment.apiUrl}/oauth2/authorization/google`;
   constructor(private fb:FormBuilder,private authService: AuthService, private router: Router, private notification: NotificationService) {
     this.loginForm = this.fb.group({
       username: ['',[Validators.required,Validators.minLength(3)]],
